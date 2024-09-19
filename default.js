@@ -4,11 +4,12 @@ const router = express.Router();
 router.get("/", async (req, res) => {
   try {
     const response = {
-      force_update: 0,
-      soft_update: 1,
-      build_no: 1,
+      force_update: 1,
+      soft_update: 0,
+      build_no: 2,
       ios_build_no: 1,
-      maintenance: 0,
+      title: "Testing",
+      message: "TEsting 1",
     };
     res.json(response);
   } catch (error) {
