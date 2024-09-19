@@ -39,6 +39,8 @@ app.use((req, res, next) => {
 });
 // -------------------------------------------------------------------------------------------------------
 
+const defaultApi = require("./default");
+
 const ipo = require("./ipo");
 const ipoDetails = require("./ipo_details");
 
@@ -46,6 +48,8 @@ const buyback = require("./buyback");
 const buyBackdetails = require("./buyback_details");
 
 // -------------------------------------------------------------------------------------------------------
+
+app.use("/app/default", cacheMiddleware, defaultApi);
 
 app.use("/app/ipo", cacheMiddleware, ipo);
 app.use("/app/ipo-details", cacheMiddleware, ipoDetails);
