@@ -7,6 +7,7 @@ router.get("/", async (req, res) => {
       force_update: 0,
       soft_update: 1,
       build_no: 1,
+      ios_build_no: 1,
       maintenance: 0,
     };
     res.json(response);
