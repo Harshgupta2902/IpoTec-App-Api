@@ -17,10 +17,6 @@ router.get("/:name", async (req, res) => {
     );
     const symnolData = reponse1.data;
 
-    const reponse2 = await axios.get(
-      `https://groww.in/v1/api/stocks_data/v1/company/search_id/${searchId}?page=0&size=10`
-    );
-    const nav = reponse1.data;
 
     res.json({ mainData, symnolData });
   } catch (error) {
@@ -29,3 +25,9 @@ router.get("/:name", async (req, res) => {
 });
 
 module.exports = router;
+
+
+
+
+
+// Convert the financials data
