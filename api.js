@@ -47,6 +47,8 @@ const ipoDetails = require("./ipo_details");
 const buyback = require("./buyback");
 const buyBackdetails = require("./buyback_details");
 
+const blogs = require("./blogs");
+
 // -------------------------------------------------------------------------------------------------------
 
 app.use("/app/default", cacheMiddleware, defaultApi);
@@ -56,6 +58,8 @@ app.use("/app/ipo-details", cacheMiddleware, ipoDetails);
 
 app.use("/app/buyback", cacheMiddleware, buyback);
 app.use("/app/buyback-details", cacheMiddleware, buyBackdetails);
+
+app.use("/app/blogs", cacheMiddleware, blogs);
 
 // -------------------------------------------------------------------------------------------------------
 app.get("/", (req, res) => {
