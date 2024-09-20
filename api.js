@@ -48,6 +48,8 @@ const buyback = require("./buyback");
 const buyBackdetails = require("./buyback_details");
 
 const blogs = require("./blogs");
+const search = require("./search");
+
 
 // -------------------------------------------------------------------------------------------------------
 
@@ -60,6 +62,8 @@ app.use("/app/buyback", cacheMiddleware, buyback);
 app.use("/app/buyback-details", cacheMiddleware, buyBackdetails);
 
 app.use("/app/blogs", cacheMiddleware, blogs);
+app.use("/app/search", cacheMiddleware, search);
+
 
 // -------------------------------------------------------------------------------------------------------
 app.get("/", (req, res) => {
