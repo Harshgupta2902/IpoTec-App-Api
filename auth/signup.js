@@ -13,7 +13,6 @@ router.post("/", async (req, res) => {
   const { name, email, number, password, fcm_token, uuid } = req.query;
 
   try {
-    // Check if the user already exists
     const existingUserResult = await pool.query(
       `SELECT * FROM users WHERE email = $1`,
       [email]
@@ -24,7 +23,6 @@ router.post("/", async (req, res) => {
         .json({ error: "User with this email already exists" });
     }
 
-    // Insert new user
     const result = await pool.query(
       `
       INSERT INTO users (name, email, number, password, fcm_token, uuid) 
