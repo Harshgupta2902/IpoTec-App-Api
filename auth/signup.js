@@ -14,8 +14,8 @@ router.post("/", async (req, res) => {
 
   try {
     const existingUserResult = await pool.query(
-      `SELECT * FROM users WHERE email = $1`,
-      [email]
+      `SELECT * FROM users WHERE email = $1 AND uuid = $2`,
+      [email, uuid]
     );
     if (existingUserResult.rows.length > 0) {
       return res
