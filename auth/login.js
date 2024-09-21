@@ -35,12 +35,16 @@ router.post("/", async (req, res) => {
         fcm_token,
         email,
       ]);
-    }
+
+
     const newData = await pool.query(`SELECT * FROM users WHERE email = $1`, [
       email,
     ]);
-
     res.status(200).json({ message: "Login successful", newData });
+
+    }
+    res.status(200).json({ message: "Login successful", user });
+    
   } catch (err) {
     console.error("Error during signup", err);
     res.status(500).json({ error: "Internal server error" });
