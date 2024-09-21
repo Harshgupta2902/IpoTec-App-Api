@@ -13,7 +13,7 @@ router.post("/", async (req, res) => {
   const { email, fcm_token, clear } = req.query;
 
   try {
-    if (fcm_token) {
+    if (fcm_token && (clear !== "true")) {
       await pool.query(`UPDATE users SET fcm_token = $1 WHERE email = $2`, [
         fcm_token,
         email,
@@ -26,7 +26,7 @@ router.post("/", async (req, res) => {
 
       updatedUser = updatedUserResult.rows[0];
       res.status(200).json({ message: "FCM Updated", updatedUser });
-    } else if (clear === true) {
+    } else if (clear === true || fcm_token) {
       await pool.query(`UPDATE users SET fcm_token = NULL WHERE email = $1`, [
         email,
       ]);
