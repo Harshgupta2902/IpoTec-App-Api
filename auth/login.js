@@ -30,11 +30,12 @@ router.post("/", async (req, res) => {
     }
 
     // Update FCM token
-    await pool.query(`UPDATE users SET fcm_token = $1 WHERE email = $2`, [
-      fcm_token,
-      email,
-    ]);
-
+    if (fcm_token !== user.fcm_token) {
+      await pool.query(`UPDATE users SET fcm_token = $1 WHERE email = $2`, [
+        fcm_token,
+        email,
+      ]);
+    }
     const newData = await pool.query(`SELECT * FROM users WHERE email = $1`, [
       email,
     ]);
