@@ -3,6 +3,7 @@ const express = require("express");
 const NodeCache = require("node-cache");
 const cron = require("node-cron");
 const cache = new NodeCache({ stdTTL: 3600 });
+require("dotenv").config();
 
 const cacheMiddleware = (req, res, next) => {
   const key = req.originalUrl;
@@ -50,6 +51,7 @@ const buyBackdetails = require("./buyback_details");
 const blogs = require("./blogs");
 const search = require("./search");
 
+const signUp = require("./auth/signup");
 
 // -------------------------------------------------------------------------------------------------------
 
@@ -62,8 +64,9 @@ app.use("/app/buyback", cacheMiddleware, buyback);
 app.use("/app/buyback-details", cacheMiddleware, buyBackdetails);
 
 app.use("/app/blogs", cacheMiddleware, blogs);
-app.use("/app/search", cacheMiddleware, search);
+app.use("/app/search", search);
 
+app.use("/app/signup", signUp);
 
 // -------------------------------------------------------------------------------------------------------
 app.get("/", (req, res) => {
