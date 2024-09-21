@@ -53,6 +53,7 @@ const search = require("./search");
 
 const signUp = require("./auth/signup");
 const login = require("./auth/login");
+const clearFcm = require("./auth/update_fcm");
 
 // -------------------------------------------------------------------------------------------------------
 
@@ -70,6 +71,7 @@ app.use("/app/search", search);
 
 app.use("/app/signup", signUp);
 app.use("/app/login", login);
+app.use("/app/update-fcm", clearFcm);
 
 // -------------------------------------------------------------------------------------------------------
 app.get("/", (req, res) => {
