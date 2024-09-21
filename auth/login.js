@@ -13,7 +13,6 @@ router.post("/", async (req, res) => {
   const { email, password, fcm_token } = req.query;
 
   try {
-    // Check if the user already exists
     const userResult = await pool.query(
       `SELECT * FROM users WHERE email = $1`,
       [email]
@@ -29,22 +28,23 @@ router.post("/", async (req, res) => {
       return res.status(401).json({ error: "Invalid email or password" });
     }
 
-    // Update FCM token
-    if (fcm_token !== user.fcm_token) {
+    let updatedUser = user;
+
+    if (fcm_token && fcm_token !== user.fcm_token) {
       await pool.query(`UPDATE users SET fcm_token = $1 WHERE email = $2`, [
         fcm_token,
         email,
       ]);
 
-
-    const newData = await pool.query(`SELECT * FROM users WHERE email = $1`, [
-      email,
-    ]);
-    res.status(200).json({ message: "Login successful", newData });
-
+      const updatedUserResult = await pool.query(
+        `SELECT * FROM users WHERE email = $1`,
+        [email]
+      );
+      updatedUser = updatedUserResult.rows[0];
     }
-    res.status(200).json({ message: "Login successful", user });
-    
+
+
+    res.status(200).json({ message: "Login successful", updatedUser });
   } catch (err) {
     console.error("Error during signup", err);
     res.status(500).json({ error: "Internal server error" });
