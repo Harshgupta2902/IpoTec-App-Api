@@ -35,7 +35,11 @@ router.post("/", async (req, res) => {
       email,
     ]);
 
-    res.status(200).json({ message: "Login successful", user });
+    const newData = await pool.query(`SELECT * FROM users WHERE email = $1`, [
+      email,
+    ]);
+
+    res.status(200).json({ message: "Login successful", newData });
   } catch (err) {
     console.error("Error during signup", err);
     res.status(500).json({ error: "Internal server error" });
