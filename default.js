@@ -10,6 +10,7 @@ router.get("/", async (req, res) => {
       ios_build_no: 1,
       title: "" ?? "Explore Mutual Funds",
       message: "" ?? "In this new version, you can now explore Mutual Funds",
+      show_ad: true,
     };
     res.json(response);
   } catch (error) {
