@@ -66,6 +66,7 @@ app.use("/app/buyback-details", cacheMiddleware, buyBackdetails);
 app.use("/app/blogs", cacheMiddleware, blogs);
 app.use("/app/search", search);
 
+
 app.use("/app/signup", signUp);
 
 // -------------------------------------------------------------------------------------------------------
