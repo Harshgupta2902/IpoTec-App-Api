@@ -8,9 +8,9 @@ const pool = new Pool({
 const router = express.Router();
 
 router.post("/", async (req, res) => {
-  console.log("Request params:", req.params);
+  console.log("Request params:", req.query);
 
-  const { name, email, number, password, fcm_token } = req.params;
+  const { name, email, number, password, fcm_token } = req.query;
 
   try {
     // Check if the user already exists
