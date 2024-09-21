@@ -52,6 +52,7 @@ const blogs = require("./blogs");
 const search = require("./search");
 
 const signUp = require("./auth/signup");
+const login = require("./auth/login");
 
 // -------------------------------------------------------------------------------------------------------
 
@@ -68,6 +69,7 @@ app.use("/app/search", search);
 
 
 app.use("/app/signup", signUp);
+app.use("/app/login", login);
 
 // -------------------------------------------------------------------------------------------------------
 app.get("/", (req, res) => {
