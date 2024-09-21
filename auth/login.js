@@ -18,8 +18,8 @@ router.post("/", async (req, res) => {
       `SELECT * FROM users WHERE email = $1`,
       [email]
     );
-    
-    if (userResult.rows.length > 0) {
+
+    if (userResult.rows.length === 0) {
       return res.status(400).json({ error: "Email not exists" });
     }
 
