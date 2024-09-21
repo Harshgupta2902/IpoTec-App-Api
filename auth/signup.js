@@ -10,7 +10,7 @@ const router = express.Router();
 router.post("/", async (req, res) => {
   console.log("Request params:", req.query);
 
-  const { name, email, number, password, fcm_token } = req.query;
+  const { name, email, number, password, fcm_token, uuid } = req.query;
 
   try {
     // Check if the user already exists
@@ -27,10 +27,10 @@ router.post("/", async (req, res) => {
     // Insert new user
     const result = await pool.query(
       `
-      INSERT INTO users (name, email, number, password, fcm_token) 
-      VALUES ($1, $2, $3, $4, $5) 
+      INSERT INTO users (name, email, number, password, fcm_token, uuid) 
+      VALUES ($1, $2, $3, $4, $5, $6) 
       RETURNING *`,
-      [name, email, number, password, fcm_token]
+      [name, email, number, password, fcm_token, uuid]
     );
 
     res
