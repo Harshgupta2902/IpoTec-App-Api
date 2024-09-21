@@ -4,13 +4,13 @@ const router = express.Router();
 router.get("/", async (req, res) => {
   try {
     const response = {
-      force_update: 0,
+      force_update: 1,
       soft_update: 0,
-      build_no: 1,
+      build_no: 3,
       ios_build_no: 1,
       title: "" ?? "Explore Mutual Funds",
       message: "" ?? "In this new version, you can now explore Mutual Funds",
-      show_ad: true,
+      show_ad: false,
     };
     res.json(response);
   } catch (error) {
