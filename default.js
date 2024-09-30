@@ -4,7 +4,7 @@ const router = express.Router();
 router.get("/", async (req, res) => {
   try {
     const response = {
-      force_update: 0,
+      force_update: 1,
       soft_update: 1,
       build_no: 3,
       ios_build_no: 1,
