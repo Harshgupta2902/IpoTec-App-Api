@@ -6,7 +6,7 @@ router.get("/", async (req, res) => {
     const response = {
       force_update: 1,
       soft_update: 1,
-      build_no: 3,
+      build_no: 4,
       ios_build_no: 1,
       title: "Update",
       message: "A New Version of App is available",
