@@ -4,9 +4,9 @@ const router = express.Router();
 router.get("/", async (req, res) => {
   try {
     const response = {
-      force_update: 1,
+      force_update: 0,
       soft_update: 1,
-      build_no: 2,
+      build_no: 3,
       ios_build_no: 1,
       title: "Update",
       message: "A New Version of App is available",
