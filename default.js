@@ -4,12 +4,12 @@ const router = express.Router();
 router.get("/", async (req, res) => {
   try {
     const response = {
-      force_update: 0,
-      soft_update: 0,
-      build_no: 1,
+      force_update: 1,
+      soft_update: 1,
+      build_no: 2,
       ios_build_no: 1,
-      title: "Explore Mutual Funds",
-      message: "In this new version, you can now explore Mutual Funds",
+      title: "Update",
+      message: "A New Version of App is available",
       show_ad: false,
     };
     res.json(response);
