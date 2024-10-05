@@ -43,7 +43,7 @@ app.use((req, res, next) => {
 const defaultApi = require("./default");
 
 const ipo = require("./ipo");
-const ipoV1 = require("./ipo");
+const ipoV1 = require("./ipo-v1");
 const ipoDetails = require("./ipo_details");
 
 const buyback = require("./buyback");
