@@ -43,6 +43,7 @@ app.use((req, res, next) => {
 const defaultApi = require("./default");
 
 const ipo = require("./ipo");
+const ipoV1 = require("./ipo");
 const ipoDetails = require("./ipo_details");
 
 const buyback = require("./buyback");
@@ -60,6 +61,7 @@ const clearFcm = require("./auth/update_fcm");
 app.use("/app/default", cacheMiddleware, defaultApi);
 
 app.use("/app/ipo", cacheMiddleware, ipo);
+app.use("/app/ipo-v1", cacheMiddleware, ipoV1);
 app.use("/app/ipo-details", cacheMiddleware, ipoDetails);
 
 app.use("/app/buyback", cacheMiddleware, buyback);
@@ -67,7 +69,6 @@ app.use("/app/buyback-details", cacheMiddleware, buyBackdetails);
 
 app.use("/app/blogs", cacheMiddleware, blogs);
 app.use("/app/search", search);
-
 
 app.use("/app/signup", signUp);
 app.use("/app/login", login);
@@ -90,5 +91,5 @@ cron.schedule("0 */12 * * *", () => {
 });
 
 app.listen(3000, () => {
-  console.log(`Server is running on http://localhost:${3000}/app/ipo`);
+  console.log(`Server is running on http://localhost:${3000}/app/ipo-v1`);
 });
