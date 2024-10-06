@@ -5,7 +5,7 @@ router.get("/", async (req, res) => {
   try {
     const response = {
       force_update: 1,
-      soft_update: 1,
+      soft_update: 0,
       build_no: 4,
       ios_build_no: 1,
       title: "Update",
