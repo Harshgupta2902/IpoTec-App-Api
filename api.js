@@ -52,6 +52,8 @@ const buyBackdetails = require("./buyback_details");
 const blogs = require("./blogs");
 const search = require("./search");
 
+const forms = require("./forms");
+
 const signUp = require("./auth/signup");
 const login = require("./auth/login");
 const clearFcm = require("./auth/update_fcm");
@@ -69,6 +71,7 @@ app.use("/app/buyback-details", cacheMiddleware, buyBackdetails);
 
 app.use("/app/blogs", cacheMiddleware, blogs);
 app.use("/app/search", search);
+app.use("/app/forms", cacheMiddleware, forms);
 
 app.use("/app/signup", signUp);
 app.use("/app/login", login);
