@@ -57,9 +57,9 @@ router.get("/", async (req, res) => {
               company_name: companyNameObj.text || "N/A",
               link: companyNameObj.link || "#",
               type: rowData["type"] || "N/A",
-              ipo_gmp: rowData["ipo gmp"].replaceAll("₹-", "-") || "N/A",
+              ipo_gmp: rowData["ipo gmp"] === "₹-" ? null : rowData["ipo gmp"],
               price: rowData["price"] || "N/A",
-              gain: rowData["gain"].replaceAll("-%", "-") || "N/A",
+              gain: rowData["gain"] === "-%" ? null : rowData["gain"],
               date: rowData["date"] || "N/A",
               slug: generateSlugFromUrl(companyNameObj.link || "#"),
             };
@@ -68,9 +68,9 @@ router.get("/", async (req, res) => {
             const formattedTable = {
               company_name: rowData["upcoming ipo"] || "N/A",
               type: rowData["type"] || "N/A",
-              ipo_gmp: rowData["ipo gmp"].replaceAll("₹-", "-") || "N/A",
-              price: rowData["price"].replaceAll("₹-", "-") || "N/A",
-              gain: rowData["gain"].replaceAll("-%", "-") || "N/A",
+              ipo_gmp: rowData["ipo gmp"] === "₹-" ? null : rowData["ipo gmp"],
+              price: rowData["price"] === "₹-" ? null : rowData["price"],
+              gain: rowData["gain"] === "-%" ? null : rowData["gain"],
               date:
                 rowData["date"]
                   .toLowerCase()
@@ -82,19 +82,22 @@ router.get("/", async (req, res) => {
           }
         });
       const sortedGmp = sortEntriesByDate(Gmp);
-
       const gmp = sortedGmp.sort((a, b) => {
         if (a.date.toLowerCase().includes("coming soon")) return 1;
         if (b.date.toLowerCase().includes("coming soon")) return -1;
 
-        // Compare by gain if both dates are valid
-        const gmpA = a.gain.includes("%")
-          ? parseInt(a.gain.replace("%", ""))
-          : 0;
-        const gmpB = b.gain.includes("%")
-          ? parseInt(b.gain.replace("%", ""))
-          : 0;
+        const gmpA =
+          a.gain && a.gain.includes("%")
+            ? parseInt(a.gain.replace("%", ""))
+            : null;
+        const gmpB =
+          b.gain && b.gain.includes("%")
+            ? parseInt(b.gain.replace("%", ""))
+            : null;
 
+        if (gmpA === null && gmpB === null) return 0;
+        if (gmpA === null) return 1;
+        if (gmpB === null) return -1;
         return gmpB - gmpA;
       });
 
