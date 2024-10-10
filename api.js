@@ -54,6 +54,7 @@ const search = require("./search");
 
 const forms = require("./forms");
 const gmp = require("./gmp");
+const subs = require("./subs");
 
 const commonDetails = require("./common_details");
 
@@ -77,6 +78,7 @@ app.use("/app/search", search);
 
 app.use("/app/forms", cacheMiddleware, forms);
 app.use("/app/gmp", cacheMiddleware, gmp);
+app.use("/app/subs", cacheMiddleware, subs);
 
 app.use("/app/common-details", cacheMiddleware, commonDetails);
 
