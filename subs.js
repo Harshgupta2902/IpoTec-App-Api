@@ -50,7 +50,11 @@ async function extractData(html) {
           $(this)
             .find("td")
             .each(function (index) {
-              row[mapHeader(headers[index])] = $(this).text().trim();
+              const cellText = $(this).text().trim();
+              row[mapHeader(headers[index])] =
+                cellText === "0" || cellText === "" || cellText === "-"
+                  ? null
+                  : cellText;
             });
           rows.push(row);
         });
