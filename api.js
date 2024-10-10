@@ -53,6 +53,8 @@ const blogs = require("./blogs");
 const search = require("./search");
 
 const forms = require("./forms");
+const gmp = require("./gmp");
+
 const commonDetails = require("./common_details");
 
 const signUp = require("./auth/signup");
@@ -74,6 +76,8 @@ app.use("/app/blogs", cacheMiddleware, blogs);
 app.use("/app/search", search);
 
 app.use("/app/forms", cacheMiddleware, forms);
+app.use("/app/gmp", cacheMiddleware, gmp);
+
 app.use("/app/common-details", cacheMiddleware, commonDetails);
 
 app.use("/app/signup", signUp);
