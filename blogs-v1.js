@@ -48,7 +48,7 @@ router.get("/", async (req, res) => {
         }
       });
 
-    res.json(articles); // Sending only the extracted data
+    res.json({articles}); // Sending only the extracted data
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
