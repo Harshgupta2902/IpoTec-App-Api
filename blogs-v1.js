@@ -18,7 +18,12 @@ router.get("/", async (req, res) => {
       .each((i, elem) => {
         const title = $(elem).find("h2 a").text();
         const link = $(elem).find("a").attr("href");
-        const image = $(elem).find("img").attr("data");
+        let image = $(elem).find("img").attr("data");
+
+        if (image) {
+          image = image.split("?")[0];
+        }
+
         // Extract the commented span text
         const comment = $(elem)
           .html()
@@ -48,7 +53,7 @@ router.get("/", async (req, res) => {
         }
       });
 
-    res.json({articles}); // Sending only the extracted data
+    res.json({ articles }); // Sending only the extracted data
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
