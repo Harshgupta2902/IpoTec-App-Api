@@ -50,6 +50,7 @@ const buyback = require("./buyback");
 const buyBackdetails = require("./buyback_details");
 
 const blogs = require("./blogs");
+const blogsV1 = require("./blogs-v1");
 const search = require("./search");
 
 const forms = require("./forms");
@@ -74,6 +75,7 @@ app.use("/app/buyback", cacheMiddleware, buyback);
 app.use("/app/buyback-details", cacheMiddleware, buyBackdetails);
 
 app.use("/app/blogs", cacheMiddleware, blogs);
+app.use("/app/blogs-v1", cacheMiddleware, blogsV1);
 app.use("/app/search", search);
 
 app.use("/app/forms", cacheMiddleware, forms);
@@ -102,6 +104,6 @@ cron.schedule("0 */12 * * *", () => {
   cache.flushAll();
 });
 
-app.listen(3001, () => {
-  console.log(`Server is running on http://localhost:${3001}/app/ipo-v1`);
+app.listen(3000, () => {
+  console.log(`Server is running on http://localhost:${3000}/app/ipo-v1`);
 });
