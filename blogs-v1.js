@@ -5,8 +5,9 @@ const router = express.Router();
 
 router.get("/", async (req, res) => {
   try {
+    const { offset = 1 } = req.query;
     const response = await axios.get(
-      "https://www.moneycontrol.com/news/business/ipo/"
+      `https://www.moneycontrol.com/news/business/ipo/page-${offset}/`
     );
     const html = response.data;
     const $ = cheerio.load(html);
