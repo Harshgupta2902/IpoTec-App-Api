@@ -58,11 +58,6 @@ const gmp = require("./gmp");
 const subs = require("./subs");
 
 const commonDetails = require("./common_details");
-
-const signUp = require("./auth/signup");
-const login = require("./auth/login");
-const clearFcm = require("./auth/update_fcm");
-
 // -------------------------------------------------------------------------------------------------------
 
 app.use("/app/default", cacheMiddleware, defaultApi);
@@ -83,11 +78,6 @@ app.use("/app/gmp", cacheMiddleware, gmp);
 app.use("/app/subs", cacheMiddleware, subs);
 
 app.use("/app/common-details", cacheMiddleware, commonDetails);
-
-app.use("/app/signup", signUp);
-app.use("/app/login", login);
-app.use("/app/update-fcm", clearFcm);
-
 // -------------------------------------------------------------------------------------------------------
 app.get("/", (req, res) => {
   res.send("API is running");
