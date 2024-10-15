@@ -3,7 +3,6 @@ const router = express.Router();
 
 router.get("/", async (req, res) => {
   try {
-
     const menuItems = [
       {
         key: "IPO GMP",
@@ -31,7 +30,6 @@ router.get("/", async (req, res) => {
       },
     ];
 
-
     const response = {
       force_update: 1,
       soft_update: 1,
@@ -49,5 +47,3 @@ router.get("/", async (req, res) => {
 });
 
 module.exports = router;
-
-
