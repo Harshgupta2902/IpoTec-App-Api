@@ -1,11 +1,52 @@
-// gmp.js
-
 const express = require("express");
 const axios = require("axios");
 const cheerio = require("cheerio");
-const { generateSlugFromUrl, sortEntriesByDate } = require("./utils");
-
 const router = express.Router();
+const url = require("url");
+
+function generateSlugFromUrl(urlString) {
+  const parsedUrl = url.parse(urlString);
+  const path = parsedUrl.pathname.replace(/^\/+|\/+$/g, ""); // Remove leading and trailing slashes
+  const parts = path.split("/");
+  const lastPart = parts[parts.length - 1];
+  return lastPart;
+}
+
+const monthToNumber = (month) => {
+  const months = {
+    January: 1,
+    February: 2,
+    March: 3,
+    April: 4,
+    May: 5,
+    June: 6,
+    July: 7,
+    August: 8,
+    September: 9,
+    October: 10,
+    November: 11,
+    December: 12,
+  };
+
+  return months[month] || 0;
+};
+
+const sortEntriesByDate = (entries) => {
+  return entries.sort((a, b) => {
+    const [dayA, monthA] = a.date.split("-")[0].trim().split(" ");
+    const [dayB, monthB] = b.date.split("-")[0].trim().split(" ");
+
+    const monthNumA = monthToNumber(monthA);
+    const monthNumB = monthToNumber(monthB);
+
+    if (monthNumA !== monthNumB) {
+      return monthNumB - monthNumA; 
+    } else {
+      return parseInt(dayA) - parseInt(dayB);
+    }
+  });
+};
+
 router.get("/", async (req, res) => {
   try {
     const url = "https://ipowatch.in/ipo-grey-market-premium-latest-ipo-gmp/";
