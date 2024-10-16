@@ -51,7 +51,7 @@ router.get("/", async (req, res) => {
             });
 
           // Safeguard check
-          const companyNameObj = rowData["upcoming ipo"];
+          const companyNameObj = rowData["latest ipos"];
           if (companyNameObj && typeof companyNameObj === "object") {
             const formattedTable = {
               company_name: companyNameObj.text || "N/A",
