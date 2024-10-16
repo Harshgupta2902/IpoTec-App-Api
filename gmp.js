@@ -99,7 +99,7 @@ router.get("/", async (req, res) => {
               link: companyNameObj.link || "#",
               type: rowData["type"] || "N/A",
               ipo_gmp: rowData["ipo gmp"] === "₹-" ? null : rowData["ipo gmp"],
-              price: rowData["price band"] === "₹-" ? null : rowData["price"],
+              price: rowData["price band"] === "₹-" ? null : rowData["price band"],
               gain:
                 rowData["listinggain"] === "-%" ? null : rowData["listinggain"],
               date: rowData["ipo date"] || "N/A",
@@ -111,7 +111,7 @@ router.get("/", async (req, res) => {
               company_name: rowData["latest ipos"] || "N/A",
               type: rowData["type"] || "N/A",
               ipo_gmp: rowData["ipo gmp"] === "₹-" ? null : rowData["ipo gmp"],
-              price: rowData["price band"] === "₹-" ? null : rowData["price"],
+              price: rowData["price band"] === "₹-" ? null : rowData["price band"],
               gain:
                 rowData["listinggain"] === "-%" ? null : rowData["listinggain"],
               date:
