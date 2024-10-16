@@ -1,16 +1,28 @@
 const express = require("express");
 const router = express.Router();
-const { admin } = require("./firebase");
+const { admin, db } = require("./firebase");
+const { messaging } = require("firebase-admin");
 
 router.get("/", async (req, res) => {
-  const deviceToken =
-    "fiJzkhRnQ8Gz3QPks--sVX:APA91bG57p2eiVX4_IiWdztsZJgyPlsS57E48bx8sZd1w60zjG9qQ3jFhf3U3EFeVgX7VCjoLtz94PXKClq85rC8VvNk4_UaReBhYCb1wRLGBHv9Dh9f3dxzlLDjS6cqEY812Ij9abgF";
+  const usersSnapshot = await db.collection("userData").get();
 
-  const message = {
-    token: deviceToken,
+  const usersWithTokens = [];
+  usersSnapshot.forEach((doc) => {
+    const userData = doc.data();
+
+    if (userData.token) {
+      usersWithTokens.push(userData);
+    }
+  });
+
+  if (usersWithTokens.length === 0) {
+    return res.status(404).json({ message: "No users with tokens found." });
+  }
+
+  const messageTemplate = {
     notification: {
       title: "📢 Waaree Energies Limited IPO",
-      body: `      
+      body: `
 🗓️ Date: 21 - 23 Oct, 2024
 🏷️ Price Band: ₹1427 - ₹1503
 📦 Market Lot: 9 Shares
@@ -30,9 +42,34 @@ router.get("/", async (req, res) => {
   };
 
   try {
-    const response = await admin.messaging().send(message);
-    res.json({ response });
-    console.log("Successfully sent message:", response);
+    const promises = usersWithTokens.map(async (user) => {
+      const message = {
+        ...messageTemplate,
+        token: user.token,
+      };
+
+      try {
+        const response = await admin.messaging().send(message);
+        console.log(
+          `Successfully sent message to ${user.name || "user"}:`,
+          response
+        );
+        return response;
+      } catch (error) {
+        console.log(`Error sending message to ${user.name || "user"}:`, error);
+        return null;
+      }
+    });
+
+    const results = await Promise.all(promises);
+
+    // Respond with the results
+    res.json({
+      message: "Notifications sent successfully",
+      results,
+    });
+
+    console.log("Successfully sent message:");
   } catch (error) {
     console.log("Error sending message:", error);
   }
