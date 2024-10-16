@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const { admin, db } = require("./firebase");
-const { messaging } = require("firebase-admin");
 
 router.get("/", async (req, res) => {
   const usersSnapshot = await db.collection("userData").get();
