@@ -40,7 +40,7 @@ const sortEntriesByDate = (entries) => {
     const monthNumB = monthToNumber(monthB);
 
     if (monthNumA !== monthNumB) {
-      return monthNumB - monthNumA; 
+      return monthNumB - monthNumA;
     } else {
       return parseInt(dayA) - parseInt(dayB);
     }
@@ -100,10 +100,9 @@ router.get("/", async (req, res) => {
               type: rowData["type"] || "N/A",
               ipo_gmp: rowData["ipo gmp"] === "₹-" ? null : rowData["ipo gmp"],
               price: rowData["price band"] || "N/A",
-              gain: rowData["gain"] === "-%" ? null : rowData["gain"],
+              gain:
+                rowData["listinggain"] === "-%" ? null : rowData["listinggain"],
               date: rowData["ipo date"] || "N/A",
-              listing_gain:
-                rowData["listinggain"] === "-%" ? null : rowData["ipo gmp"],
               slug: generateSlugFromUrl(companyNameObj.link || "#"),
             };
             Gmp.push(formattedTable);
@@ -113,9 +112,8 @@ router.get("/", async (req, res) => {
               type: rowData["type"] || "N/A",
               ipo_gmp: rowData["ipo gmp"] === "₹-" ? null : rowData["ipo gmp"],
               price: rowData["price band"] === "₹-" ? null : rowData["price"],
-              gain: rowData["gain"] === "-%" ? null : rowData["gain"],
-              listing_gain:
-                rowData["listinggain"] === "-%" ? null : rowData["ipo gmp"],
+              gain:
+                rowData["listinggain"] === "-%" ? null : rowData["listinggain"],
               date:
                 rowData["ipo date"]
                   .toLowerCase()
