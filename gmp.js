@@ -125,25 +125,7 @@ router.get("/", async (req, res) => {
           }
         });
 
-      const sortedGmp = sortEntriesByDate(Gmp);
-      const gmp = sortedGmp.sort((a, b) => {
-        if (a.date.toLowerCase().includes("coming soon")) return 1;
-        if (b.date.toLowerCase().includes("coming soon")) return -1;
-
-        const gmpA =
-          a.gain && a.gain.includes("%")
-            ? parseInt(a.gain.replace("%", ""))
-            : null;
-        const gmpB =
-          b.gain && b.gain.includes("%")
-            ? parseInt(b.gain.replace("%", ""))
-            : null;
-
-        if (gmpA === null && gmpB === null) return 0;
-        if (gmpA === null) return 1;
-        if (gmpB === null) return -1;
-        return gmpB - gmpA;
-      });
+      const gmp = sortEntriesByDate(Gmp);
 
       res.json({ gmp });
     } else {
