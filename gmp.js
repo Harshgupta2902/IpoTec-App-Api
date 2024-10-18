@@ -127,9 +127,12 @@ router.get("/", async (req, res) => {
           }
         });
 
-      const gmp = sortEntriesByDate(Gmp);
+      const gmpData = sortEntriesByDate(Gmp);
 
-      res.json({ gmp });
+      const gmp = {
+        gmp: gmpData
+      };
+      res.json(gmp);
     } else {
       throw new Error("Failed to fetch the page");
     }
