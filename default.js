@@ -36,6 +36,10 @@ router.get("/", async (req, res) => {
         key: "Terms & Conditions",
         path: "/policyView",
       },
+      {
+        key: "Contact Us",
+        path: "/contact-us",
+      },
     ];
 
     const terms = `<!DOCTYPE html>
