@@ -28,6 +28,14 @@ router.get("/", async (req, res) => {
         key: "IPO Forms",
         path: "/forms",
       },
+      {
+        key: "Privacy Policy",
+        path: "/policyView",
+      },
+      {
+        key: "Terms & Conditions",
+        path: "/policyView",
+      },
     ];
 
     const terms = `<!DOCTYPE html>
