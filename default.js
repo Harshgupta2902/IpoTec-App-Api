@@ -38,7 +38,7 @@ router.get("/", async (req, res) => {
       },
       {
         key: "Contact Us",
-        path: "/contact-us",
+        path: "/contact-us"
       }
     ];
 
