@@ -9,7 +9,6 @@ router.get("/", async (req, res) => {
   }`;
   try {
     const response = await axios.get(url);
-
     res.json(response.data);
   } catch (error) {
     res.status(500).json({ error: error.message });
