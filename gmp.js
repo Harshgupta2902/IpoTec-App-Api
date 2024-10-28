@@ -100,22 +100,22 @@ router.get("/", async (req, res) => {
               type: rowData["type"] || "N/A",
               ipo_gmp: rowData["ipo gmp"] === "₹-" ? null : rowData["ipo gmp"],
               price:
-                rowData["price band"] === "₹-" ? null : rowData["price band"],
+                rowData["price"] === "₹-" ? null : rowData["price band"],
               gain:
-                rowData["listinggain"] === "-%" ? null : rowData["listinggain"],
+                rowData["gain"] === "-%" ? null : rowData["listinggain"],
               date: rowData["ipo date"] || "N/A",
               slug: generateSlugFromUrl(companyNameObj.link || "#"),
             };
             Gmp.push(formattedTable);
           } else if (typeof companyNameObj === "string") {
             const formattedTable = {
-              company_name: rowData["latest ipos"] || "N/A",
+              company_name: rowData["current ipos"] || "N/A",
               type: rowData["type"] || "N/A",
               ipo_gmp: rowData["ipo gmp"] === "₹-" ? null : rowData["ipo gmp"],
               price:
-                rowData["price band"] === "₹-" ? null : rowData["price band"],
+                rowData["price"] === "₹-" ? null : rowData["price band"],
               gain:
-                rowData["listinggain"] === "-%" ? null : rowData["listinggain"],
+                rowData["gain"] === "-%" ? null : rowData["listinggain"],
               date:
                 rowData["ipo date"]
                   .toLowerCase()
