@@ -103,7 +103,7 @@ router.get("/", async (req, res) => {
                 rowData["price"] === "₹-" ? null : rowData["price"],
               gain:
                 rowData["gain"] === "-%" ? null : rowData["gain"],
-              date: rowData["ipo date"] || "N/A",
+              date: rowData["date"] === "Soon" ? "Coming Soon" :rowData["date"],
               slug: generateSlugFromUrl(companyNameObj.link || "#"),
             };
             Gmp.push(formattedTable);
@@ -117,9 +117,7 @@ router.get("/", async (req, res) => {
               gain:
                 rowData["gain"] === "-%" ? null : rowData["gain"],
               date:
-                rowData["ipo date"]
-                  .toLowerCase()
-                  .replaceAll("soon", "Coming Soon") || "N/A",
+                rowData["date"] === "Soon" ? "Coming Soon" :rowData["date"],
             };
             Gmp.push(formattedTable);
           } else {
