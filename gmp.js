@@ -100,9 +100,9 @@ router.get("/", async (req, res) => {
               type: rowData["type"] || "N/A",
               ipo_gmp: rowData["ipo gmp"] === "₹-" ? null : rowData["ipo gmp"],
               price:
-                rowData["price"] === "₹-" ? null : rowData["price band"],
+                rowData["price"] === "₹-" ? null : rowData["price"],
               gain:
-                rowData["gain"] === "-%" ? null : rowData["listinggain"],
+                rowData["gain"] === "-%" ? null : rowData["gain"],
               date: rowData["ipo date"] || "N/A",
               slug: generateSlugFromUrl(companyNameObj.link || "#"),
             };
@@ -113,9 +113,9 @@ router.get("/", async (req, res) => {
               type: rowData["type"] || "N/A",
               ipo_gmp: rowData["ipo gmp"] === "₹-" ? null : rowData["ipo gmp"],
               price:
-                rowData["price"] === "₹-" ? null : rowData["price band"],
+                rowData["price"] === "₹-" ? null : rowData["price"],
               gain:
-                rowData["gain"] === "-%" ? null : rowData["listinggain"],
+                rowData["gain"] === "-%" ? null : rowData["gain"],
               date:
                 rowData["ipo date"]
                   .toLowerCase()
