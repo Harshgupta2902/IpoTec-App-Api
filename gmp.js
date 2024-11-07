@@ -127,7 +127,7 @@ router.get("/", async (req, res) => {
 
        // const sortedGmp = sortEntriesByDate(Gmp);
       const gmp = Gmp;
-      res.json(gmp);
+      res.json({gmp});
     } else {
       throw new Error("Failed to fetch the page");
     }
