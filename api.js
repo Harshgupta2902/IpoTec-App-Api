@@ -55,6 +55,7 @@ const search = require("./search");
 
 const forms = require("./forms");
 const gmp = require("./gmp");
+const gmpv1 = require("./gmp-v1");
 const subs = require("./subs");
 const fcm = require("./fcm");
 
@@ -76,6 +77,7 @@ app.use("/app/search", search);
 
 app.use("/app/forms", cacheMiddleware, forms);
 app.use("/app/gmp", cacheMiddleware, gmp);
+app.use("/app/gmp-v1", cacheMiddleware, gmpv1);
 app.use("/app/subs", cacheMiddleware, subs);
 app.use("/app/fcm", fcm);
 
