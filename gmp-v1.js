@@ -41,15 +41,18 @@ router.get("/", async (req, res) => {
               rowData["lot_size"] = cellText;
               break;
             case 6:
-              rowData["open"] = cellText;
+              rowData["lot"] = cellText;
               break;
             case 7:
-              rowData["close"] = cellText;
+              rowData["open"] = cellText;
               break;
             case 8:
-              rowData["listing"] = cellText;
+              rowData["close"] = cellText;
               break;
             case 9:
+              rowData["listing"] = cellText;
+              break;
+            case 10:
               rowData["updated_on"] = cellText;
               break;
             default:
