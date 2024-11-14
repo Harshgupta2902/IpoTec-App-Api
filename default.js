@@ -89,7 +89,8 @@ they will be able to take the necessary actions.</p></div><!----><br><strong>Sec
       show_ad: false,
       menu_items: menuItems,
       terms: terms,
-      privacy: privacy
+      privacy: privacy,
+      allotment: "https://ipostatus.kfintech.com/",
     };
     res.json(response);
   } catch (error) {
