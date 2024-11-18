@@ -5,3 +5,4 @@
 /.env
 .vercel
 .env.development.local
+.env*.local
