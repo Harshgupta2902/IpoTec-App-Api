@@ -82,7 +82,7 @@ they will be able to take the necessary actions.</p></div><!----><br><strong>Sec
     const response = {
       force_update: 1,
       soft_update: 1,
-      build_no: 6,
+      build_no: 7,
       ios_build_no: 1,
       title: "Update",
       message: "A New Version of App is available",
