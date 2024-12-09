@@ -40,48 +40,36 @@ app.use((req, res, next) => {
 });
 // -------------------------------------------------------------------------------------------------------
 
-const defaultApi = require("./default");
+const defaultApi = require("./common/default");
+const overview = require("./common/overview");
+const mainboard = require("./mainboard/current");
+const sme = require("./mainboard/sme");
 
-const ipo = require("./ipo");
-const ipoV1 = require("./ipo-v1");
-const ipoDetails = require("./ipo_details");
+const mainSubs = require("./subscription/mainboard");
+const smeSubs = require("./subscription/sme");
 
-const buyback = require("./buyback");
-const buyBackdetails = require("./buyback_details");
+const gmp = require("./gmp");
+const mainBoardCalendar = require("./calendar/mainboard_calendar");
+const smeCalendar = require("./calendar/sme_calendar");
 
 const blogs = require("./blogs");
-const blogsV1 = require("./blogs-v1");
-const search = require("./search");
 
-const forms = require("./forms");
-const gmp = require("./gmp");
-const gmpv1 = require("./gmp-v1");
-const subs = require("./subs");
-const fcm = require("./fcm");
-
-const commonDetails = require("./common_details");
 // -------------------------------------------------------------------------------------------------------
 
 app.use("/app/default", cacheMiddleware, defaultApi);
+app.use("/app/overview", cacheMiddleware, overview);
+app.use("/app/mainboard", cacheMiddleware, mainboard);
+app.use("/app/sme", cacheMiddleware, sme);
 
-app.use("/app/ipo", cacheMiddleware, ipo);
-app.use("/app/ipo-v1", cacheMiddleware, ipoV1);
-app.use("/app/ipo-details", cacheMiddleware, ipoDetails);
+app.use("/app/mainSubs", cacheMiddleware, mainSubs);
+app.use("/app/smeSubs", cacheMiddleware, smeSubs);
 
-app.use("/app/buyback", cacheMiddleware, buyback);
-app.use("/app/buyback-details", cacheMiddleware, buyBackdetails);
+app.use("/app/gmp", cacheMiddleware, gmp);
+app.use("/app/mainBoardCalendar", cacheMiddleware, mainBoardCalendar);
+app.use("/app/smeCalendar", cacheMiddleware, smeCalendar);
 
 app.use("/app/blogs", cacheMiddleware, blogs);
-app.use("/app/blogs-v1", cacheMiddleware, blogsV1);
-app.use("/app/search", search);
 
-app.use("/app/forms", cacheMiddleware, forms);
-app.use("/app/gmp", cacheMiddleware, gmp);
-app.use("/app/gmp-v1", cacheMiddleware, gmpv1);
-app.use("/app/subs", cacheMiddleware, subs);
-app.use("/app/fcm", fcm);
-
-app.use("/app/common-details", cacheMiddleware, commonDetails);
 // -------------------------------------------------------------------------------------------------------
 app.get("/", (req, res) => {
   res.send("API is running");
@@ -99,5 +87,5 @@ cron.schedule("0 */12 * * *", () => {
 });
 
 app.listen(3001, () => {
-  console.log(`Server is running on http://localhost:${3001}/app/ipo-v1`);
+  console.log(`Server is running on http://localhost:${3001}/app/`);
 });
