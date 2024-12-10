@@ -42,15 +42,20 @@ app.use((req, res, next) => {
 
 const defaultApi = require("./common/default");
 const overview = require("./common/overview");
+
 const mainboard = require("./mainboard/current");
 const sme = require("./mainboard/sme");
 
 const mainSubs = require("./subscription/mainboard");
 const smeSubs = require("./subscription/sme");
-
 const gmp = require("./gmp");
+
 const mainBoardCalendar = require("./calendar/mainboard_calendar");
 const smeCalendar = require("./calendar/sme_calendar");
+
+const performance = require("./history/performance");
+const mostsuccessfulipo = require("./history/most_successful_ipo");
+const leastsuccessfulipo = require("./history/least_successful_ipo");
 
 const blogs = require("./blogs");
 
@@ -58,6 +63,7 @@ const blogs = require("./blogs");
 
 app.use("/app/default", cacheMiddleware, defaultApi);
 app.use("/app/overview", cacheMiddleware, overview);
+
 app.use("/app/mainboard", cacheMiddleware, mainboard);
 app.use("/app/sme", cacheMiddleware, sme);
 
@@ -65,8 +71,13 @@ app.use("/app/mainSubs", cacheMiddleware, mainSubs);
 app.use("/app/smeSubs", cacheMiddleware, smeSubs);
 
 app.use("/app/gmp", cacheMiddleware, gmp);
+
 app.use("/app/mainBoardCalendar", cacheMiddleware, mainBoardCalendar);
 app.use("/app/smeCalendar", cacheMiddleware, smeCalendar);
+
+app.use("/app/performance", cacheMiddleware, performance);
+app.use("/app/mostsuccessfulipo", cacheMiddleware, mostsuccessfulipo);
+app.use("/app/leastsuccessfulipo", cacheMiddleware, leastsuccessfulipo);
 
 app.use("/app/blogs", cacheMiddleware, blogs);
 
