@@ -319,6 +319,9 @@ async function fetchGmpTable(url) {
 async function fetchNews(slug) {
   const baseUrl = "https://www.chittorgarh.com/ipo_news";
   const url = `${baseUrl}/${slug}`;
+  const urlRegex = /url=([^&]+)/;
+
+
   try {
     const { data: html } = await axios.get(url);
 
@@ -331,13 +334,19 @@ async function fetchNews(slug) {
       const timestamp = $(element).find('p').first().text();  // First <p> tag contains timestamp
       const subtitle = $(element).find('p').last().text();  // Last <p> tag contains subtitle
       const publisher = $(element).find('small.float-end').text();
-      newsItems.push({
-        title,
-        url: href,
-        timestamp,
-        subtitle,
-        publishedBy: publisher
-    });
+
+         const match = href.match(urlRegex);
+         if (match) {
+          const decodedUrl = decodeURIComponent(match[1]);
+          newsItems.push({
+            title,
+            url: decodedUrl,
+            timestamp,
+            subtitle,
+            publishedBy: publisher
+        });
+      }
+      
   });
     return newsItems;
   } catch (error) {
