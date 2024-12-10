@@ -35,6 +35,7 @@ app.use((req, res, next) => {
     "Access-Control-Allow-Methods",
     "GET, POST, OPTIONS, PUT, DELETE"
   );
+
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
   next();
 });
@@ -45,19 +46,22 @@ const overview = require("./common/overview");
 
 const mainboard = require("./mainboard/current");
 const sme = require("./mainboard/sme");
+const details = require("./mainboard/ipo_details");
 
 const mainSubs = require("./subscription/mainboard");
 const smeSubs = require("./subscription/sme");
-const gmp = require("./gmp");
+const gmp = require("./common/gmp");
 
 const mainBoardCalendar = require("./calendar/mainboard_calendar");
 const smeCalendar = require("./calendar/sme_calendar");
 
-const performance = require("./history/performance");
-const mostsuccessfulipo = require("./history/most_successful_ipo");
-const leastsuccessfulipo = require("./history/least_successful_ipo");
+const performance = require("./ipo_history/performance");
+const mostsuccessfulipo = require("./ipo_history/most_successful_ipo");
+const leastsuccessfulipo = require("./ipo_history/least_successful_ipo");
 
-const blogs = require("./blogs");
+const checkBlogs = require("./firebase/check");
+
+const blogs = require("./common/blogs");
 
 // -------------------------------------------------------------------------------------------------------
 
@@ -66,6 +70,7 @@ app.use("/app/overview", cacheMiddleware, overview);
 
 app.use("/app/mainboard", cacheMiddleware, mainboard);
 app.use("/app/sme", cacheMiddleware, sme);
+app.use("/app/details", cacheMiddleware, details);
 
 app.use("/app/mainSubs", cacheMiddleware, mainSubs);
 app.use("/app/smeSubs", cacheMiddleware, smeSubs);
@@ -78,6 +83,8 @@ app.use("/app/smeCalendar", cacheMiddleware, smeCalendar);
 app.use("/app/performance", cacheMiddleware, performance);
 app.use("/app/mostsuccessfulipo", cacheMiddleware, mostsuccessfulipo);
 app.use("/app/leastsuccessfulipo", cacheMiddleware, leastsuccessfulipo);
+
+app.use("/app/checkBlogs", cacheMiddleware, checkBlogs);
 
 app.use("/app/blogs", cacheMiddleware, blogs);
 
