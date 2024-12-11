@@ -1,6 +1,7 @@
 const cors = require("cors");
 const express = require("express");
 const NodeCache = require("node-cache");
+const axios = require('axios');
 const cron = require("node-cron");
 const cache = new NodeCache({ stdTTL: 3600 });
 require("dotenv").config();
@@ -51,7 +52,7 @@ const details = require("./mainboard/ipo_details");
 const mainSubs = require("./subscription/mainboard");
 const smeSubs = require("./subscription/sme");
 const gmp = require("./common/gmp");
-
+  
 const mainBoardCalendar = require("./calendar/mainboard_calendar");
 const smeCalendar = require("./calendar/sme_calendar");
 
@@ -106,4 +107,13 @@ cron.schedule("0 */12 * * *", () => {
 
 app.listen(3001, () => {
   console.log(`Server is running on http://localhost:${3001}/app/`);
+  (async () => {
+    try {
+        const response = await axios.get(`http://localhost:${3001}/app/checkBlogs`);
+        console.log('API Response:', response.data);
+    } catch (error) {
+        console.error('Error hitting /app/checkBlogs:', error.message);
+    }
+})();
+
 });

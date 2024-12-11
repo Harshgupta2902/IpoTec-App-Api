@@ -54,7 +54,6 @@ router.get("/", async (req, res) => {
         const openDate = ipo.open ? moment(ipo.open, "MMM DD, YYYY") : null;
         return openDate && openDate.isAfter(today);
       });
-      console.log(filteredIPOs.length);
     } else if (type === "current") {
       filteredIPOs = tableData.filter((ipo) => {
         const openDate = ipo.open ? moment(ipo.open, "MMM DD, YYYY") : null;

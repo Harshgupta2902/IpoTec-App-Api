@@ -5,28 +5,36 @@ router.get("/", async (req, res) => {
   try {
     const menuItems = [
       {
-        key: "IPO GMP",
-        path: "/gmp",
+        key: "Mainboard Subscription",
+        path: "/mainSubs",
       },
       {
-        key: "IPO Subscription",
-        path: "/subs",
+        key: "SME Subscription",
+        path: "/smeSubs",
       },
       {
-        key: "Upcoming IPO",
-        path: "/mainBoard",
+        key: "Ipo Performance",
+        path: "/performance",
       },
       {
-        key: "SME IPO",
-        path: "/sme",
+        key: "Ipo Overview",
+        path: "/overview",
       },
       {
-        key: "BuyBack IPO",
-        path: "/buyBack",
+        key: "Mainboard Ipo Calendar",
+        path: "/mainCalendar",
       },
       {
-        key: "IPO Forms",
-        path: "/forms",
+        key: "SME Ipo Calendar",
+        path: "/smeCalendar",
+      },
+      {
+        key: "Most Successful Ipo",
+        path: "/mostSuccessIpo",
+      },
+      {
+        key: "Least Successful Ipo",
+        path: "/leastSuccessIpo",
       },
       {
         key: "Privacy Policy",

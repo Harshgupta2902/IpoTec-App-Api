@@ -11,7 +11,7 @@ router.get("/", async (req, res) => {
 
     const $ = cheerio.load(html);
     const calendarEvents = [];
-    $("td.tr_box").each((index, element) => {
+    $("td.tr_box, td.tr_today").each((index, element) => {
       const day = $(element).find(".CalDate").text().trim();
       const events = [];
       $(element)
@@ -23,7 +23,10 @@ router.get("/", async (req, res) => {
             events.push({ eventText, eventLink });
           }
         });
-        calendarEvents.push({ day, events });
+        if (day) {
+          calendarEvents.push({ day, events });
+        }
+        // calendarEvents.push({ day, events });
     });
     res.json({ success: true, data: calendarEvents });
   } catch (error) {

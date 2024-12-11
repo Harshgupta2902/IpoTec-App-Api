@@ -17,17 +17,17 @@ router.get("/", async (req, res) => {
       const rowData = {
         companyName: $(columns[0]).text().trim(),
         href: $(columns[0]).find("a").attr("href") || null,
-        closeDate: $(columns[1]).text().trim(),
-        size: $(columns[2]).text().trim(),
-        qib: $(columns[3]).text().trim(),
-        snii: $(columns[4]).text().trim(),
-        bnni: $(columns[5]).text().trim(),
-        nii: $(columns[6]).text().trim(),
-        retail: $(columns[7]).text().trim(),
-        employee: $(columns[8]).text().trim(),
-        others: $(columns[9]).text().trim(),
-        total: $(columns[10]).text().trim(),
-        applications: $(columns[11]).text().trim(),
+        closeDate: $(columns[1]).text().trim() === "" ? "-" : $(columns[1]).text().trim(),
+        size: $(columns[2]).text().trim() === "" ? "-" : $(columns[2]).text().trim(),
+        qib: $(columns[3]).text().trim() === "" ? "-" : $(columns[3]).text().trim(),
+        snii: $(columns[4]).text().trim() === "" ? "-" : $(columns[4]).text().trim(),
+        bnni: $(columns[5]).text().trim() === "" ? "-" : $(columns[5]).text().trim(),
+        nii: $(columns[6]).text().trim() === "" ? "-" : $(columns[6]).text().trim(),
+        retail: $(columns[7]).text().trim() === "" ? "-" : $(columns[7]).text().trim(),
+        employee: $(columns[8]).text().trim() === "" ? "-" : $(columns[8]).text().trim(),
+        others: $(columns[9]).text().trim() === "" ? "-" : $(columns[9]).text().trim(),
+        total: $(columns[10]).text().trim() === "" ? "-" : $(columns[10]).text().trim(),
+        applications: $(columns[11]).text().trim() === "" ? "-" : $(columns[11]).text().trim(),
       };
       tableData.push(rowData);
     });
