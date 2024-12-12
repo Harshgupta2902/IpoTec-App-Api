@@ -17,10 +17,6 @@ router.get("/", async (req, res) => {
         path: "/performance",
       },
       {
-        key: "Ipo Overview",
-        path: "/overview",
-      },
-      {
         key: "Mainboard Ipo Calendar",
         path: "/mainCalendar",
       },

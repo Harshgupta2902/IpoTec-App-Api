@@ -43,7 +43,6 @@ app.use((req, res, next) => {
 // -------------------------------------------------------------------------------------------------------
 
 const defaultApi = require("./common/default");
-const overview = require("./common/overview");
 
 const mainboard = require("./mainboard/current");
 const sme = require("./mainboard/sme");
@@ -67,7 +66,6 @@ const blogs = require("./common/blogs");
 // -------------------------------------------------------------------------------------------------------
 
 app.use("/app/default", cacheMiddleware, defaultApi);
-app.use("/app/overview", cacheMiddleware, overview);
 
 app.use("/app/mainboard", cacheMiddleware, mainboard);
 app.use("/app/sme", cacheMiddleware, sme);
