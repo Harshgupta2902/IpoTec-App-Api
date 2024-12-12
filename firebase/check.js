@@ -3,6 +3,7 @@ const cheerio = require("cheerio");
 const axios = require("axios");
 const { sendNotification } = require("./fcm");
 const router = express.Router();
+const { db } = require("./firebase");
 
 let lastPost = null;
 
@@ -61,30 +62,28 @@ async function checkForLatestPost(offset = 1) {
 
       const messageTemplate = {
         notification: {
-          title: newPost.title.split(" ").slice(0, 5).join(" "),
+          title: newPost.title,
           image: newPost.image,
           body: newPost.subtitle,
         },
       };
 
-      const token =
-        "cIXwOMW3R7WFxjG2vnZpli:APA91bHmnv15oChQi9Wm-ZYFQ8bZs4XhczfXpG-FHkrsWeW50KzBzpkvM2HHzj3Ms5rq4v5dOIJXwbckIdmY2ehxyqn5FC0iQPsFoRvAI6XxTZNpKN0m2dE";
-      // const token =
-      //   "dMbnGjasQTeXh6xNkzFy6L:APA91bHUkd9UlCL-iI6QZUrE2O5qsZjWgxgcgyiKsZpkQJ2kCIG95xFZE_QNduu3icxPOR545vAbp6BdFAOidwRZcn555LHA-U7nqlo7_ubzKtq_o4tKBsc";
+      const usersSnapshot = await db.collection("userData").get();
+      const users = usersSnapshot.docs.map((doc) => doc.data());
 
-      try {
-        const response = await sendNotification(token, messageTemplate);
-
-        return {
-          message: "Notification sent successfully",
-          response,
-        };
-      } catch (error) {
-        console.log("Error sending notification:", error);
-        return {
-          message: "Error sending notification",
-          error: error.message,
-        };
+      for (const user of users) {
+        const token = user.token;
+        if (token) {
+          try {
+            const response = await sendNotification(token, messageTemplate);
+            console.log(`Notification sent to user with token: ${token}`);
+            console.log(response);
+          } catch (error) {
+            console.log(`Error sending notification to token ${token}:`, error);
+          }
+        } else {
+          console.log(`No FCM token found for user: ${user.uid}`);
+        }
       }
     } else {
       console.log("No new post detected.");
