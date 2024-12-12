@@ -107,8 +107,8 @@ app.listen(3001, () => {
   console.log(`Server is running on http://localhost:${3001}/app/`);
   (async () => {
     try {
-        const response = await axios.get(`http://localhost:${3001}/app/checkBlogs`);
-        console.log('API Response:', response.data);
+        // const response = await axios.get(`http://localhost:${3001}/app/checkBlogs`);
+        // console.log('API Response:', response.data);
     } catch (error) {
         console.error('Error hitting /app/checkBlogs:', error.message);
     }

@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const axios = require("axios");
 const cheerio = require("cheerio");
+const moment = require("moment");
 
 router.get("/", async (req, res) => {
   const { slug } = req.query;
@@ -188,8 +189,7 @@ router.get("/", async (req, res) => {
       registrar: registrarDetails,
       subscription: subscriptionData,
       gmpData: GmpData,
-      news: news
-
+      news: news,
     };
 
     res.json({ success: true, data: details });
@@ -226,22 +226,22 @@ async function fetchSubscriptionTable(slug) {
       // If "Total" is found in the first cell, add the row and break the loop
       if (cells[0]?.toLowerCase().includes("total")) {
         subscriptionData.push({
-          investorCategory: cells[0].replaceAll("[.]", "-"),
-          subscriptionTimes: cells[1].replaceAll("[.]", "-"),
-          sharesOffered: cells[2].replaceAll("[.]", "-"),
-          sharesBidFor: cells[3].replaceAll("[.]", "-"),
-          totalAmount: cells[4].replaceAll("[.]", "-"),
+          investorCategory: cells[0],
+          subscriptionTimes: cells[1],
+          sharesOffered: cells[2],
+          sharesBidFor: cells[3],
+          totalAmount: cells[4],
         });
         break; // Exit loop
       }
 
       if (cells.length > 0) {
         subscriptionData.push({
-          investorCategory: cells[0].replaceAll("[.]", "-"),
-          subscriptionTimes: cells[1].replaceAll("[.]", "-"),
-          sharesOffered: cells[2].replaceAll("[.]", "-"),
-          sharesBidFor: cells[3].replaceAll("[.]", "-"),
-          totalAmount: cells[4].replaceAll("[.]", "-"),
+          investorCategory: cells[0],
+          subscriptionTimes: cells[1],
+          sharesOffered: cells[2],
+          sharesBidFor: cells[3],
+          totalAmount: cells[4],
         });
       }
     }
@@ -265,48 +265,47 @@ async function fetchGmpTable(url) {
     const $ = cheerio.load(html);
 
     const h2 = $("h2:contains('Day-wise IPO')");
-    const table = h2.next('table');
+    const table = h2.next("table");
     const tableRows = table.find("tbody tr");
     const ipoGmpData = [];
-    
+
     tableRows.each((index, row) => {
-        const cells = $(row).find("td");
-        
-        const gmpDate = $(cells[0]).text().trim();
-        const ipoPrice = $(cells[1]).text().trim();
-        const gmp = $(cells[2]).text().trim();
-        const sub2Sauda = $(cells[3]).text().trim();
-        const estimatedListingPrice = $(cells[4]).text().trim();
-        const lastUpdated = $(cells[5]).text().trim();
-        
-        // Push the data into the array
-        const badge = $(cells[0]).find('span.badge');
-        const badgeText = badge.text().trim();
+      const cells = $(row).find("td");
 
-        const gmpImg = $(cells[2]).find('img');
-        const imgSrc = gmpImg.attr('src');
-        let status = '';
-    
-        // Determine status based on image src
-        if (imgSrc && imgSrc.includes('line.png')) {
-            status = 'line';
-        } else if (imgSrc && imgSrc.includes('arrow_up.png')) {
-            status = 'up';
-        } else if (imgSrc && imgSrc.includes('arrow_down.png')) {
-            status = 'down';
-        }
-    
+      const gmpDate = $(cells[0]).text().trim();
+      const ipoPrice = $(cells[1]).text().trim();
+      const gmp = $(cells[2]).text().trim();
+      const sub2Sauda = $(cells[3]).text().trim();
+      const estimatedListingPrice = $(cells[4]).text().trim();
+      const lastUpdated = $(cells[5]).text().trim();
 
-        ipoGmpData.push({
-            gmpDate,
-            ipoPrice,
-            gmp,
-            sub2Sauda,
-            estimatedListingPrice,
-            lastUpdated,
-            badge: badgeText,
-            status: status
-        });
+      // Push the data into the array
+      const badge = $(cells[0]).find("span.badge");
+      const badgeText = badge.text().trim();
+
+      const gmpImg = $(cells[2]).find("img");
+      const imgSrc = gmpImg.attr("src");
+      let status = "";
+
+      // Determine status based on image src
+      if (imgSrc && imgSrc.includes("line.png")) {
+        status = "line";
+      } else if (imgSrc && imgSrc.includes("arrow_up.png")) {
+        status = "up";
+      } else if (imgSrc && imgSrc.includes("arrow_down.png")) {
+        status = "down";
+      }
+
+      ipoGmpData.push({
+        gmpDate,
+        ipoPrice,
+        gmp,
+        sub2Sauda,
+        estimatedListingPrice,
+        lastUpdated,
+        badge: badgeText,
+        status: status,
+      });
     });
     return ipoGmpData;
   } catch (error) {
@@ -315,12 +314,10 @@ async function fetchGmpTable(url) {
   }
 }
 
-
 async function fetchNews(slug) {
   const baseUrl = "https://www.chittorgarh.com/ipo_news";
   const url = `${baseUrl}/${slug}`;
   const urlRegex = /url=([^&]+)/;
-
 
   try {
     const { data: html } = await axios.get(url);
@@ -328,26 +325,33 @@ async function fetchNews(slug) {
     const $ = cheerio.load(html);
     const newsItems = [];
 
-    $('ol.list-group li.list-group-item').each((index, element) => {
-      const title = $(element).find('h2').text();
-      const href = $(element).find('a').attr('href');
-      const timestamp = $(element).find('p').first().text();  // First <p> tag contains timestamp
-      const subtitle = $(element).find('p').last().text();  // Last <p> tag contains subtitle
-      const publisher = $(element).find('small.float-end').text();
+    $("ol.list-group li.list-group-item").each((index, element) => {
+      const title = $(element).find("h2").text();
+      const href = $(element).find("a").attr("href");
+      const timeStamp = $(element).find("p").first().text(); // First <p> tag contains timestamp
+      const subtitle = $(element).find("p").last().text(); // Last <p> tag contains subtitle
+      const publisher = $(element)
+        .find("small.float-end")
+        .text()
+        .replace("Published by :", "")
+        .trim();
 
-         const match = href.match(urlRegex);
-         if (match) {
-          const decodedUrl = decodeURIComponent(match[1]);
-          newsItems.push({
-            title,
-            url: decodedUrl,
-            timestamp,
-            subtitle,
-            publishedBy: publisher
+      const timestamp = moment(timeStamp, "MMMM D, YYYY h:mm:ss A")
+        .format("D MMM YY h:mma")
+        .toUpperCase();
+
+      const match = href.match(urlRegex);
+      if (match) {
+        const decodedUrl = decodeURIComponent(match[1]);
+        newsItems.push({
+          title,
+          url: decodedUrl,
+          timestamp,
+          subtitle,
+          publishedBy: publisher,
         });
       }
-      
-  });
+    });
     return newsItems;
   } catch (error) {
     console.error("Error fetching subscription table:", error);
