@@ -37,32 +37,6 @@ router.get("/", async (req, res) => {
         profitLoss,
       });
     });
-
-    const performanceData = [];
-    $("table.table-bordered tbody tr").each((i, el) => {
-      const row = $(el);
-      const companyName = row.find("td:nth-child(1)").text().trim();
-      const listingDayGain = row.find("td:nth-child(2)").text().trim();
-      const currentGainLoss = row.find("td:nth-child(3)").text().trim();
-
-      if (!companyName) return;
-
-      performanceData.push({
-        companyName,
-        listingDayGain,
-        currentGainLoss,
-      });
-    });
-
-    ipoData.forEach((ipo) => {
-      const performance = performanceData.find(
-        (perf) => perf.companyName === ipo.companyName
-      );
-      if (performance) {
-        ipo.performance = performance;
-      }
-    });
-
     res.json({ status: true, data: ipoData });
   } catch (error) {
     console.error("Error fetching IPO data:", error);
