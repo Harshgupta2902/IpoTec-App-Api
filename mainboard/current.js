@@ -49,6 +49,17 @@ router.get("/", async (req, res) => {
       tableData.push(rowData);
     });
 
+    const cleanName = (name) => name.replace(/ Limited IPO$/i, "");
+
+    if (type === "all") {
+      filteredIPOs = tableData.map((ipo) => ({
+        name: cleanName(ipo.companyName),
+        href: ipo.href,
+      }));
+      res.json({ success: true, data: filteredIPOs });
+      return;
+    }
+
     if (type === "upcoming") {
       filteredIPOs = tableData.filter((ipo) => {
         const openDate = ipo.open ? moment(ipo.open, "MMM DD, YYYY") : null;

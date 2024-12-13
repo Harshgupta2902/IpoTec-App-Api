@@ -31,7 +31,11 @@ router.get("/", async (req, res) => {
       const exchangeText = $(columns[9]).text().trim();
       const rowData = {
         companyName: $(columns[0]).text().trim(),
-        href: $(columns[0]).find("a").attr("href") || null,
+        href:
+          $(columns[0])
+            .find("a")
+            .attr("href")
+            .replaceAll("https://www.chittorgarh.com/ipo/", "") || null,
         open: $(columns[1]).text().trim(),
         close: $(columns[2]).text().trim(),
         listing: $(columns[3]).text().trim(),
@@ -46,6 +50,17 @@ router.get("/", async (req, res) => {
       };
       tableData.push(rowData);
     });
+
+    const cleanName = (name) => name.replace(/ Limited IPO$/i, "");
+
+    if (type === "all") {
+      filteredIPOs = tableData.map((ipo) => ({
+        name: cleanName(ipo.companyName),
+        href: ipo.href,
+      }));
+      res.json({ success: true, data: filteredIPOs });
+      return;
+    }
 
     if (type === "upcoming") {
       filteredIPOs = tableData.filter((ipo) => {
@@ -79,15 +94,14 @@ router.get("/", async (req, res) => {
     }
 
     filteredIPOs.sort((a, b) => {
-      const dateA = a.open ? moment(a.open, 'MMM DD, YYYY') : null;
-      const dateB = b.open ? moment(b.open, 'MMM DD, YYYY') : null;
+      const dateA = a.open ? moment(a.open, "MMM DD, YYYY") : null;
+      const dateB = b.open ? moment(b.open, "MMM DD, YYYY") : null;
 
       if (!dateA) return 1; // Push items with no date to the end
       if (!dateB) return -1;
       return dateA - dateB;
-  });
+    });
 
-  
     res.json({ success: true, data: filteredIPOs });
   } catch (error) {
     console.error("Error fetching SME IPO data:", error.message);

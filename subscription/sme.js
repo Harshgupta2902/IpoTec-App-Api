@@ -16,7 +16,12 @@ router.get("/", async (req, res) => {
       const columns = $(row).find("td");
       const rowData = {
         companyName: $(columns[0]).text().trim(),
-        href: $(columns[0]).find("a").attr("href") || null,
+        href:
+          $(columns[0])
+            .find("a")
+            .attr("href")
+            .replaceAll("https://www.chittorgarh.com/ipo_subscription/", "") || null,
+        // href: $(columns[0]).find("a").attr("href") || null,
         open: $(columns[1]).text().trim(),
         close: $(columns[2]).text().trim(),
         size: $(columns[3]).text().trim(),

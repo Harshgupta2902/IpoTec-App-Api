@@ -19,14 +19,13 @@ router.get("/", async (req, res) => {
 
       const companyName = row.find("td:nth-child(1) b").text().trim();
       if (!companyName) return;
-
+      const ipoDetailHref = row.find("td:nth-child(1) a:contains('IPO Detail')").attr("href").replaceAll("https://www.chittorgarh.com/ipo/", "");
       const listedOn = row.find("td:nth-child(2)").text().trim();
       const issuePrice = row.find("td:nth-child(3)").text().trim();
       const listingDayClose = row.find("td:nth-child(4)").text().trim();
       const listingDayGain = row.find("td:nth-child(5)").text().trim();
       const currentPrice = row.find("td:nth-child(6)").text().trim();
       const profitLoss = row.find("td:nth-child(7)").text().trim();
-
       ipoData.push({
         companyName,
         listedOn,
@@ -35,6 +34,7 @@ router.get("/", async (req, res) => {
         listingDayGain,
         currentPrice,
         profitLoss,
+        href: ipoDetailHref
       });
     });
     res.json({ status: true, data: ipoData });
