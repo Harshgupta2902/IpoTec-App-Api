@@ -42,12 +42,12 @@ router.get("/", async (req, res) => {
       },
       {
         key: "Contact Us",
-        path: "/contact-us"
+        path: "/contact-us",
       },
       {
         key: "Share with Friends",
-        path: "/share"
-      }
+        path: "/share",
+      },
     ];
 
     const terms = `<!DOCTYPE html>
@@ -93,7 +93,7 @@ they will be able to take the necessary actions.</p></div><!----><br><strong>Sec
       build_no: 8,
       ios_build_no: 1,
       title: "Update",
-      message: "A New Version of App is available",
+      message: "A New Version of App is available with new UI",
       show_ad: false,
       menu_items: menuItems,
       terms: terms,

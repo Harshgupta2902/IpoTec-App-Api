@@ -60,6 +60,7 @@ const mostsuccessfulipo = require("./ipo_history/most_successful_ipo");
 const leastsuccessfulipo = require("./ipo_history/least_successful_ipo");
 
 const checkBlogs = require("./firebase/check");
+const checkevents = require("./firebase/checkevents");
 
 const blogs = require("./common/blogs");
 
@@ -84,6 +85,7 @@ app.use("/app/mostsuccessfulipo", cacheMiddleware, mostsuccessfulipo);
 app.use("/app/leastsuccessfulipo", cacheMiddleware, leastsuccessfulipo);
 
 app.use("/app/checkBlogs", cacheMiddleware, checkBlogs);
+app.use("/app/checkevents", cacheMiddleware, checkevents);
 
 app.use("/app/blogs", cacheMiddleware, blogs);
 
@@ -103,14 +105,19 @@ cron.schedule("0 */12 * * *", () => {
   cache.flushAll();
 });
 
+cron.schedule("0 */24 * * *", () => {
+  console.log("Clearing specific cache keys every 12 hours");
+  cache.flushAll();
+});
+
 app.listen(3001, () => {
   console.log(`Server is running on http://localhost:${3001}/app/`);
   (async () => {
     try {
-      // const response = await axios.get(
-      //   `http://localhost:${3001}/app/checkBlogs`
-      // );
-      // console.log("API Response:", response.data);
+      const response = await axios.get(
+        `http://localhost:${3001}/app/checkBlogs`
+      );
+      console.log("API Response:", response.data);
     } catch (error) {
       console.error("Error hitting /app/checkBlogs:", error.message);
     }
