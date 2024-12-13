@@ -34,7 +34,6 @@ router.get("/", async (req, res) => {
       ipoData.push(ipoRow);
     });
 
-    // Fetch data from additional APIs
     const [mainboardResponse, smeResponse] = await Promise.all([
       axios.get("http://localhost:3001/app/mainboard?type=all"),
       axios.get("http://localhost:3001/app/sme?type=all"),
@@ -45,35 +44,30 @@ router.get("/", async (req, res) => {
       ...smeResponse.data.data,
     ];
 
-   // Compare and update IPO data with href
-ipoData.forEach((ipo) => {
-  const ipoWords = ipo.companyName.toLowerCase().split(' ');
+    ipoData.forEach((ipo) => {
+      const ipoWords = ipo.companyName.toLowerCase().split(" ");
 
-  // Generate 2-3 word phrases for comparison
-  const phrases = [];
-  for (let i = 0; i < ipoWords.length; i++) {
-    if (i + 1 < ipoWords.length) {
-      phrases.push(`${ipoWords[i]} ${ipoWords[i + 1]}`); // 2-word phrases
-    }
-    if (i + 2 < ipoWords.length) {
-      phrases.push(`${ipoWords[i]} ${ipoWords[i + 1]} ${ipoWords[i + 2]}`); // 3-word phrases
-    }
-  }
+      const phrases = [];
+      for (let i = 0; i < ipoWords.length; i++) {
+        if (i + 1 < ipoWords.length) {
+          phrases.push(`${ipoWords[i]} ${ipoWords[i + 1]}`);
+        }
+        if (i + 2 < ipoWords.length) {
+          phrases.push(`${ipoWords[i]} ${ipoWords[i + 1]} ${ipoWords[i + 2]}`);
+        }
+      }
 
-  // Find a match in additionalData
-  const match = additionalData.find((item) => {
-    const itemName = item.name.toLowerCase();
-    return phrases.some((phrase) => itemName.includes(phrase));
-  });
+      const match = additionalData.find((item) => {
+        const itemName = item.name.toLowerCase();
+        return phrases.some((phrase) => itemName.includes(phrase));
+      });
 
-  if (match) {
-    ipo.href = match.href;
-  }
-});
+      if (match) {
+        ipo.href = match.href;
+      }
+    });
 
-res.json({ success: true, data: ipoData });
-
-
+    res.json({ success: true, data: ipoData });
   } catch (error) {
     console.error("Error fetching data:", error.message);
     return [];
