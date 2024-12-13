@@ -1,16 +1,14 @@
-const express = require("express");
 const cheerio = require("cheerio");
 const axios = require("axios");
 const { sendNotification } = require("./fcm");
-const router = express.Router();
 const { db } = require("./firebase");
 
 let lastPost = null;
 
-async function checkForLatestPost(offset = 1) {
+async function checkForLatestPost() {
   try {
     const response = await axios.get(
-      `https://www.moneycontrol.com/news/business/ipo/page-${offset}/`
+      `https://www.moneycontrol.com/news/business/ipo/page-1/`
     );
     const html = response.data;
     const $ = cheerio.load(html);
@@ -95,13 +93,13 @@ async function checkForLatestPost(offset = 1) {
   }
 }
 
-router.get("/", async (req, res) => {
-  await checkForLatestPost();
-  setInterval(() => {
-    const currentTime = new Date().toLocaleString();
-    console.log(`Checking for new posts at ${currentTime}...`);
-    checkForLatestPost();
-  }, 300000);
-});
+// router.get("/", async (req, res) => {
+//   await checkForLatestPost();
+//   setInterval(() => {
+//     const currentTime = new Date().toLocaleString();
+//     console.log(`Checking for new posts at ${currentTime}...`);
+//     checkForLatestPost();
+//   }, 300000);
+// });
 
-module.exports = router;
+module.exports = { checkForLatestPost };

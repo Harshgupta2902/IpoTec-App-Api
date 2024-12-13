@@ -1,10 +1,11 @@
 const cors = require("cors");
 const express = require("express");
 const NodeCache = require("node-cache");
-const axios = require("axios");
 const cron = require("node-cron");
 const cache = new NodeCache({ stdTTL: 3600 });
 require("dotenv").config();
+const { checkForLatestPost } = require("./firebase/check");
+
 
 const cacheMiddleware = (req, res, next) => {
   const key = req.originalUrl;
@@ -59,7 +60,7 @@ const performance = require("./ipo_history/performance");
 const mostsuccessfulipo = require("./ipo_history/most_successful_ipo");
 const leastsuccessfulipo = require("./ipo_history/least_successful_ipo");
 
-const checkBlogs = require("./firebase/check");
+// const checkBlogs = require("./firebase/check");
 const checkevents = require("./firebase/checkevents");
 
 const blogs = require("./common/blogs");
@@ -84,7 +85,7 @@ app.use("/app/performance", cacheMiddleware, performance);
 app.use("/app/mostsuccessfulipo", cacheMiddleware, mostsuccessfulipo);
 app.use("/app/leastsuccessfulipo", cacheMiddleware, leastsuccessfulipo);
 
-app.use("/app/checkBlogs", cacheMiddleware, checkBlogs);
+// app.use("/app/checkBlogs", cacheMiddleware, checkBlogs);
 app.use("/app/checkevents", cacheMiddleware, checkevents);
 
 app.use("/app/blogs", cacheMiddleware, blogs);
@@ -114,10 +115,14 @@ app.listen(3001, () => {
   console.log(`Server is running on http://localhost:${3001}/app/`);
   (async () => {
     try {
-      const response = await axios.get(
-        `https://ipo-tec-app-api.vercel.app/app/checkBlogs`
-      );
-      console.log("API Response:", response.data);
+      await checkForLatestPost();
+      setInterval(() => {
+        const currentTime = new Date().toLocaleString();
+        console.log(`Checking for new posts at ${currentTime}...`);
+        checkForLatestPost();
+      }, 300000);
+
+      res.json({ message: "Checking for latest posts..." });
     } catch (error) {
       console.error("Error hitting /app/checkBlogs:", error.message);
     }
