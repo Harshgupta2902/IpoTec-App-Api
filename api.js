@@ -115,7 +115,7 @@ app.listen(3001, () => {
   (async () => {
     try {
       const response = await axios.get(
-        `http://localhost:${3001}/app/checkBlogs`
+        `https://ipo-tec-app-api.vercel.app/app/checkBlogs`
       );
       console.log("API Response:", response.data);
     } catch (error) {

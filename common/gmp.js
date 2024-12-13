@@ -35,8 +35,8 @@ router.get("/", async (req, res) => {
     });
 
     const [mainboardResponse, smeResponse] = await Promise.all([
-      axios.get("http://localhost:3001/app/mainboard?type=all"),
-      axios.get("http://localhost:3001/app/sme?type=all"),
+      axios.get("https://ipo-tec-app-api.vercel.app/app/mainboard?type=all"),
+      axios.get("https://ipo-tec-app-api.vercel.app/app/sme?type=all"),
     ]);
 
     const additionalData = [
