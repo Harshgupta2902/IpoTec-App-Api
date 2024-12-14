@@ -125,7 +125,6 @@ app.listen(3001, () => {
         checkForLatestPost();
       }, 300000);
 
-      res.json({ message: "Checking for latest posts..." });
     } catch (error) {
       console.error("Error hitting /app/checkBlogs:", error.message);
     }
