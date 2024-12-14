@@ -74,10 +74,9 @@ async function checkForLatestPost() {
         if (token) {
           try {
             const response = await sendNotification(token, messageTemplate);
-            console.log(`Notification sent to user with token: ${token}`);
-            console.log(response);
+            console.log(`Notification sent to user with token: ${user.displayName}`);
           } catch (error) {
-            console.log(`Error sending notification to token ${token}:`, error);
+            console.log(`Error sending notification to token ${user.displayName}:`, error);
           }
         } else {
           console.log(`No FCM token found for user: ${user.uid}`);
@@ -86,7 +85,7 @@ async function checkForLatestPost() {
     } else {
       console.log("No new post detected.");
       return { message: "No new post detected" };
-    }
+    } 
   } catch (error) {
     console.error("Error while checking for the latest post:", error.message);
     return { message: "Error checking for latest post", error: error.message };

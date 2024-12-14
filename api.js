@@ -5,6 +5,7 @@ const cron = require("node-cron");
 const cache = new NodeCache({ stdTTL: 3600 });
 require("dotenv").config();
 const { checkForLatestPost } = require("./firebase/check");
+const axios = require("axios");
 
 
 const cacheMiddleware = (req, res, next) => {
@@ -115,6 +116,8 @@ app.listen(3001, () => {
   console.log(`Server is running on http://localhost:${3001}/app/`);
   (async () => {
     try {
+      const response = await axios.get(`http://localhost:${3001}/app/checkevents`);
+      console.log("Check events response:", response.data);
       await checkForLatestPost();
       setInterval(() => {
         const currentTime = new Date().toLocaleString();

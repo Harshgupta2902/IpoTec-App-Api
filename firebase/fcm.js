@@ -10,7 +10,10 @@ const sendNotification = async (token, messageTemplate) => {
     console.log(`Successfully sent message to`, response);
     return response;
   } catch (error) {
-    console.log(`Error sending message to `, error);
+    if (error.errorInfo?.code === "messaging/registration-token-not-registered") {
+      console.log(`invalid token: ${token}`);
+    }
+
     return null;
   }
 };

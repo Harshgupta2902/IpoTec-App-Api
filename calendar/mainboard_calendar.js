@@ -16,7 +16,7 @@ router.get("/", async (req, res) => {
       const events = [];
       $(element)
         .find("a")
-        .each((i, anchor) => {
+        .each((i, anchor) => {  
           const eventText = $(anchor).text().trim();
           const eventLink = $(anchor).attr("href");
           if (eventText) {
