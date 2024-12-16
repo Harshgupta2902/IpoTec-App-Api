@@ -155,7 +155,7 @@ router.get("/", async (req, res) => {
       return {
         companyName: ipo["~compare_name"],
         href: ipo["Issuer Company"]
-          .match(/href="([^"]+)"/)?.[1] || null,
+          .match(/href="([^"]+)"/)?.[1].replaceAll("https://www.chittorgarh.com/ipo/", "") || null,
         open: openDate,
         close: closeDate,
         listing: listingDate,
