@@ -3,6 +3,7 @@ const router = express.Router();
 const axios = require("axios");
 const cheerio = require("cheerio");
 const { sendNotification } = require("./fcm");
+const { db } = require("./firebase");
 
 const fetchCalendarEvents = async (url) => {
   try {
