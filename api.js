@@ -65,7 +65,7 @@ const mostsuccessfulipo = require("./ipo_history/most_successful_ipo");
 const leastsuccessfulipo = require("./ipo_history/least_successful_ipo");
 
 // const checkBlogs = require("./firebase/check");
-const checkevents = require("./firebase/checkevents");
+// const checkevents = require("./firebase/checkevents");
 
 const blogs = require("./common/blogs");
 
@@ -90,7 +90,7 @@ app.use("/app/mostsuccessfulipo", cacheMiddleware, mostsuccessfulipo);
 app.use("/app/leastsuccessfulipo", cacheMiddleware, leastsuccessfulipo);
 
 // app.use("/app/checkBlogs", cacheMiddleware, checkBlogs);
-app.use("/app/checkevents", cacheMiddleware, checkevents);
+// app.use("/app/checkevents", cacheMiddleware, checkevents);
 
 app.use("/app/blogs", cacheMiddleware, blogs);
 
