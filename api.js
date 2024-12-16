@@ -4,9 +4,10 @@ const NodeCache = require("node-cache");
 const cron = require("node-cron");
 const cache = new NodeCache({ stdTTL: 3600 });
 require("dotenv").config();
-const { checkForLatestPost } = require("./firebase/check");
-const axios = require("axios");
-
+const {
+  mainBoardNotifications,
+  smeNotifications,
+} = require("./firebase/checkevents");
 
 const cacheMiddleware = (req, res, next) => {
   const key = req.originalUrl;
@@ -107,9 +108,12 @@ cron.schedule("0 */12 * * *", () => {
   cache.flushAll();
 });
 
-cron.schedule("0 */24 * * *", () => {
-  console.log("Clearing specific cache keys every 12 hours");
-  cache.flushAll();
+cron.schedule("45 10 * * *", async () => {
+  await mainBoardNotifications();
+});
+
+cron.schedule("0 12 * * *", async () => {
+  await smeNotifications();
 });
 
 app.listen(3001, () => {
@@ -124,7 +128,6 @@ app.listen(3001, () => {
     //     console.log(`Checking for new posts at ${currentTime}...`);
     //     checkForLatestPost();
     //   }, 300000);
-
     // } catch (error) {
     //   console.error("Error hitting /app/checkBlogs:", error.message);
     // }
