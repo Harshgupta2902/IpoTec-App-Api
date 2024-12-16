@@ -142,14 +142,17 @@ router.get("/", async (req, res) => {
     const ipoData = data.reportTableData || [];
     const parsedIPOs = ipoData.map((ipo) => ({
       companyName: ipo["~compare_name"],
-      href: ipo["Issuer Company"].match(/href="([^"]+)"/)?.[1].replace("https://www.chittorgarh.com/ipo/", "") || null,
+      href:
+        ipo["Issuer Company"]
+          .match(/href="([^"]+)"/)?.[1]
+          .replace("https://www.chittorgarh.com/ipo/", "") || null,
       open: ipo["~Issue_Open_Date"]
         ? moment(ipo["~Issue_Open_Date"], "YYYY-MM-DD")
         : null,
-        close: ipo["~Issue_Close_Date"]
+      close: ipo["~Issue_Close_Date"]
         ? moment(ipo["~Issue_Close_Date"], "YYYY-MM-DD")
         : null,
-        listing: ipo["~ListingDate"]
+      listing: ipo["~ListingDate"]
         ? moment(ipo["~ListingDate"], "YYYY-MM-DD")
         : null,
       price: ipo["Issue Price (Rs)"] || null,
@@ -160,9 +163,11 @@ router.get("/", async (req, res) => {
         : [],
     }));
 
+    const cleanName = (name) => name.replace(/ Limited IPO$/i, "");
+
     if (type === "all") {
       filteredIPOs = parsedIPOs.map((ipo) => ({
-        name: ipo.companyName,
+        name: cleanName(ipo.companyName),
         href: ipo.href,
       }));
     } else if (type === "upcoming") {

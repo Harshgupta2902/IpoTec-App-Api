@@ -141,45 +141,47 @@ router.get("/", async (req, res) => {
 
     const ipoData = data.reportTableData || [];
     const parsedIPOs = ipoData.map((ipo) => ({
-      name: ipo["~compare_name"],
+      companyName: ipo["~compare_name"],
       href: ipo["Issuer Company"].match(/href="([^"]+)"/)?.[1].replace("https://www.chittorgarh.com/ipo/", "") || null,
-      openDate: ipo["~Issue_Open_Date"]
+      open: ipo["~Issue_Open_Date"]
         ? moment(ipo["~Issue_Open_Date"], "YYYY-MM-DD")
         : null,
-      closeDate: ipo["~Issue_Close_Date"]
+      close: ipo["~Issue_Close_Date"]
         ? moment(ipo["~Issue_Close_Date"], "YYYY-MM-DD")
         : null,
-      listingDate: ipo["~ListingDate"]
+      listing: ipo["~ListingDate"]
         ? moment(ipo["~ListingDate"], "YYYY-MM-DD")
         : null,
-      issuePrice: ipo["Issue Price (Rs)"] || null,
-      issueSize: ipo["Issue Size (Rs Cr.)"] || null,
-      lotSize: ipo["Lot Size"] || null,
+      price: ipo["Issue Price (Rs)"] || null,
+      size: ipo["Issue Size (Rs Cr.)"] || null,
+      lot: ipo["Lot Size"] || null,
       exchange: ipo["Exchange"]
         ? ipo["Exchange"].split(",").map((e) => e.trim())
         : [],
     }));
 
+    const cleanName = (name) => name.replace(/ Limited IPO$/i, "");
+
     if (type === "all") {
       filteredIPOs = parsedIPOs.map((ipo) => ({
-        name: ipo.name,
+        name: cleanName(ipo.companyName),
         href: ipo.href,
       }));
     } else if (type === "upcoming") {
       filteredIPOs = parsedIPOs.filter((ipo) => {
-        return ipo.openDate && ipo.openDate.isAfter(today);
+        return ipo.open && ipo.open.isAfter(today);
       });
     } else if (type === "current") {
       filteredIPOs = parsedIPOs.filter((ipo) => {
         return (
-          ipo.openDate &&
-          ipo.closeDate &&
-          today.isBetween(ipo.openDate, ipo.closeDate, null, "[]")
+          ipo.open &&
+          ipo.close &&
+          today.isBetween(ipo.open, ipo.close, null, "[]")
         );
       });
     } else if (type === "past") {
       filteredIPOs = parsedIPOs.filter((ipo) => {
-        return ipo.listingDate && ipo.listingDate.isBefore(today);
+        return ipo.listing && ipo.listing.isBefore(today);
       });
     } else {
       return res.status(400).json({
@@ -189,8 +191,8 @@ router.get("/", async (req, res) => {
     }
 
     filteredIPOs.sort((a, b) => {
-      const dateA = a.openDate || moment(0);
-      const dateB = b.openDate || moment(0);
+      const dateA = a.open || moment(0);
+      const dateB = b.open || moment(0);
       return dateA - dateB;
     });
 
