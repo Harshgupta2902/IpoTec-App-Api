@@ -140,28 +140,33 @@ router.get("/", async (req, res) => {
     );
 
     const ipoData = data.reportTableData || [];
-    const parsedIPOs = ipoData.map((ipo) => ({
-      companyName: ipo["~compare_name"],
-      href:
-        ipo["Issuer Company"]
-          .match(/href="([^"]+)"/)?.[1]
-          .replace("https://www.chittorgarh.com/ipo/", "") || null,
-      open: ipo["~Issue_Open_Date"]
-        ? moment(ipo["~Issue_Open_Date"], "YYYY-MM-DD")
-        : null,
-      close: ipo["~Issue_Close_Date"]
-        ? moment(ipo["~Issue_Close_Date"], "YYYY-MM-DD")
-        : null,
-      listing: ipo["~ListingDate"]
-        ? moment(ipo["~ListingDate"], "YYYY-MM-DD")
-        : null,
-      price: ipo["Issue Price (Rs)"] || null,
-      size: ipo["Issue Size (Rs Cr.)"] || null,
-      lot: ipo["Lot Size"] || null,
-      exchange: ipo["Exchange"]
-        ? ipo["Exchange"].split(",").map((e) => e.trim())
-        : [],
-    }));
+    const parsedIPOs = ipoData.map((ipo) => {
+      // Format dates
+      const openDate = ipo["~Issue_Open_Date"]
+        ? moment(ipo["~Issue_Open_Date"], "YYYY-MM-DD").format("MMM DD, YYYY")
+        : null;
+      const closeDate = ipo["~Issue_Close_Date"]
+        ? moment(ipo["~Issue_Close_Date"], "YYYY-MM-DD").format("MMM DD, YYYY")
+        : null;
+      const listingDate = ipo["~ListingDate"]
+        ? moment(ipo["~ListingDate"], "YYYY-MM-DD").format("MMM DD, YYYY")
+        : null;
+
+      return {
+        companyName: ipo["~compare_name"],
+        href: ipo["Issuer Company"]
+          .match(/href="([^"]+)"/)?.[1] || null,
+        open: openDate,
+        close: closeDate,
+        listing: listingDate,
+        price: ipo["Issue Price (Rs)"] || null,
+        size: ipo["Issue Size (Rs Cr.)"] || null,
+        lot: ipo["Lot Size"] || null,
+        exchange: ipo["Exchange"]
+          ? ipo["Exchange"].split(",").map((e) => e.trim())
+          : [],
+      };
+    });
 
     const cleanName = (name) => name.replace(/ Limited IPO$/i, "");
 
@@ -172,19 +177,19 @@ router.get("/", async (req, res) => {
       }));
     } else if (type === "upcoming") {
       filteredIPOs = parsedIPOs.filter((ipo) => {
-        return ipo.open && ipo.open.isAfter(today);
+        return ipo.open && moment(ipo.open, "MMM DD, YYYY").isAfter(today);
       });
     } else if (type === "current") {
       filteredIPOs = parsedIPOs.filter((ipo) => {
         return (
           ipo.open &&
           ipo.close &&
-          today.isBetween(ipo.open, ipo.close, null, "[]")
+          today.isBetween(moment(ipo.open, "MMM DD, YYYY"), moment(ipo.close, "MMM DD, YYYY"), null, "[]")
         );
       });
     } else if (type === "past") {
       filteredIPOs = parsedIPOs.filter((ipo) => {
-        return ipo.listing && ipo.listing.isBefore(today);
+        return ipo.listing && moment(ipo.listing, "MMM DD, YYYY").isBefore(today);
       });
     } else {
       return res.status(400).json({
