@@ -9,6 +9,8 @@ const {
   smeNotifications,
 } = require("./firebase/checkevents");
 
+const { checkForLatestPost } = require("./firebase/check");
+
 const cacheMiddleware = (req, res, next) => {
   const key = req.originalUrl;
   const cachedResponse = cache.get(key);
