@@ -121,15 +121,15 @@ cron.schedule("0 12 * * *", async () => {
 app.listen(3002, () => {
   console.log(`Server is running on http://localhost:${3002}/app/`);
   (async () => {
-    // try {
-    //   await checkForLatestPost();
-    //   setInterval(() => {
-    //     const currentTime = new Date().toLocaleString();
-    //     console.log(`Checking for new posts at ${currentTime}...`);
-    //     checkForLatestPost();
-    //   }, 300000);
-    // } catch (error) {
-    //   console.error("Error hitting /app/checkBlogs:", error.message);
-    // }
+    try {
+      await checkForLatestPost();
+      setInterval(() => {
+        const currentTime = new Date().toLocaleString();
+        console.log(`Checking for new posts at ${currentTime}...`);
+        checkForLatestPost();
+      }, 300000);
+    } catch (error) {
+      console.error("Error hitting /app/checkBlogs:", error.message);
+    }
   })();
 });

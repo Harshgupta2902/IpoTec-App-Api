@@ -84,9 +84,9 @@ they will be able to take the necessary actions.</p></div><!----><br><strong>Sec
       `;
 
     const response = {
-      force_update: 1,
+      force_update: 0,
       soft_update: 1,
-      build_no: 8,
+      build_no: 9,
       ios_build_no: 1,
       title: "Update",
       message: "A New Version of App is available with new UI",
