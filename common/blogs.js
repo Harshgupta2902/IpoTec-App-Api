@@ -2,6 +2,7 @@ const cheerio = require("cheerio");
 const express = require("express");
 const axios = require("axios");
 const router = express.Router();
+const moment = require("moment"); // Import moment.js for time calculations
 
 router.get("/", async (req, res) => {
   try {
@@ -13,6 +14,9 @@ router.get("/", async (req, res) => {
     const $ = cheerio.load(html);
 
     const articles = [];
+    const watermark = "moneycontrol";
+    const logoImage =
+      "https://play-lh.googleusercontent.com/qTe9gNn4oQ_TRLtVqWBr_CeqXqcSMniRo1kZOUKLcK0huJ6V3qL6ibEOnK6Xls1k4Rg=w480-h960-rw";
 
     $("#cagetory li")
       .not(".hide-mobile, .show-mobile")
@@ -37,20 +41,51 @@ router.get("/", async (req, res) => {
             /(\w+) (\d+), (\d{4}) (\d{2}):(\d{2}) ([APM]+) IST/
           );
 
+          // if (dateParts) {
+          //   // Manually constructing the date in "14 Oct, 24 02:06 PM" format
+          //   const [, month, day, year, hours, minutes, ampm] = dateParts;
+          //   const shortYear = year.slice(2);
+          //   const shortMonth = new Date(`${month} 1`).toLocaleString("en-us", {
+          //     month: "short",
+          //   });
+          //   formattedDate = `${day} ${shortMonth},${shortYear} ${hours}:${minutes} ${ampm}`;
+          // }
+
           if (dateParts) {
-            // Manually constructing the date in "14 Oct, 24 02:06 PM" format
             const [, month, day, year, hours, minutes, ampm] = dateParts;
-            const shortYear = year.slice(2);
-            const shortMonth = new Date(`${month} 1`).toLocaleString("en-us", {
-              month: "short",
-            });
-            formattedDate = `${day} ${shortMonth},${shortYear} ${hours}:${minutes} ${ampm}`;
+
+            // Convert to ISO 8601 format for Moment.js
+            const formattedDate = moment(
+              `${month} ${day}, ${year} ${hours}:${minutes} ${ampm}`,
+              "MMMM DD, YYYY hh:mm A"
+            );
+
+            // Calculate relative time
+            const now = moment();
+            const diffMinutes = now.diff(formattedDate, "minutes");
+            const diffHours = Math.floor(diffMinutes / 60);
+            const diffDays = now.diff(formattedDate, "days");
+
+            if (diffMinutes < 60) {
+              relativeDate = `${diffMinutes}m`; // e.g., "5m", "59m"
+            } else if (diffHours < 24) {
+              relativeDate = `${diffHours}h`; // e.g., "1h", "23h"
+            } else {
+              relativeDate = `${diffDays}d`; // e.g., "1d", "2d"
+            }
           }
         }
 
         // Skip if title is empty
         if (title) {
-          articles.push({ title, link, image, date: formattedDate });
+          articles.push({
+            title,
+            link,
+            image,
+            date: relativeDate,
+            watermark,
+            logo: logoImage,
+          });
         }
       });
 

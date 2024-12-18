@@ -13,10 +13,6 @@ router.get("/", async (req, res) => {
         path: "/smeSubs",
       },
       {
-        key: "Ipo Performance",
-        path: "/performance",
-      },
-      {
         key: "Mainboard Ipo Calendar",
         path: "/mainCalendar",
       },
@@ -107,3 +103,9 @@ they will be able to take the necessary actions.</p></div><!----><br><strong>Sec
 });
 
 module.exports = router;
+
+
+// {
+//   key: "Ipo Performance",
+//   path: "/performance",
+// },

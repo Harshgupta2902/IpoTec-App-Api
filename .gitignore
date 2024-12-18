@@ -6,3 +6,6 @@
 .vercel
 .env.development.local
 .env*.local
+
+crawl.js
+test.js

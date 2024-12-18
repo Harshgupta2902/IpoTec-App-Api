@@ -3,9 +3,6 @@ const cheerio = require("cheerio");
 const { sendNotification } = require("./fcm");
 const { db } = require("./firebase");
 
-
-
-
 const smeNotifications = async () => {
   try {
     const today = new Date();
@@ -21,11 +18,9 @@ const smeNotifications = async () => {
       .map((event) => event.events)
       .flat();
 
-      console.log(sme);
-      
-    // if (sme.length > 0) {
-    //   await sendNotificationsToUsers("Today SME IPO Events", sme);
-    // }
+    if (sme.length > 0) {
+      await sendNotificationsToUsers("Today SME IPO Events", sme);
+    }
   } catch (error) {
     console.error("Error sending SME notifications:", error.message);
   }
@@ -46,17 +41,13 @@ const mainBoardNotifications = async () => {
       .map((event) => event.events)
       .flat();
 
-      console.log(mainboard);
-
-    // if (mainboard.length > 0) {
-    //   await sendNotificationsToUsers("Today Mainboard IPO Events", mainboard);
-    // }
+    if (mainboard.length > 0) {
+      await sendNotificationsToUsers("Today Mainboard IPO Events", mainboard);
+    }
   } catch (error) {
     console.error("Error sending SME notifications:", error.message);
   }
 };
-
-
 
 const fetchCalendarEvents = async (url) => {
   try {
@@ -124,14 +115,11 @@ const sendNotificationsToUsers = async (title, events) => {
   }
 };
 
-
 const formatNotificationBody = (events) => {
   const formattedEvents = events
     .map((event) => `📍 ${event.eventText}`)
     .join("\n");
   return formattedEvents;
 };
-
-
 
 module.exports = { smeNotifications, mainBoardNotifications };
