@@ -2,7 +2,7 @@ const cheerio = require("cheerio");
 const express = require("express");
 const axios = require("axios");
 const router = express.Router();
-const moment = require("moment"); // Import moment.js for time calculations
+const moment = require("moment-timezone"); // Import moment.js for time calculations
 
 router.get("/", async (req, res) => {
   try {
@@ -55,9 +55,10 @@ router.get("/", async (req, res) => {
             const [, month, day, year, hours, minutes, ampm] = dateParts;
 
             // Convert to ISO 8601 format for Moment.js
-            const formattedDate = moment(
+            const formattedDate = moment.tz(
               `${month} ${day}, ${year} ${hours}:${minutes} ${ampm}`,
-              "MMMM DD, YYYY hh:mm A"
+              "MMMM DD, YYYY hh:mm A",
+              "Asia/Kolkata"
             );
 
             // Calculate relative time
