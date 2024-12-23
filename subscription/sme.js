@@ -59,20 +59,19 @@ router.get("/", async (req, res) => {
         message: "Invalid data structure received from the API",
       });
     }
-
     const tableData = response.reportTableData.map((item) => ({
-      companyName: item["Company Name"] || "-",
-      href: item["~URLRewrite_Folder_Name"] || null,
-      close: item["Close Date"] || "-",
-      open: item["Open Date"] || "-",
-      size: item["Size (Rs Cr)"] || "-",
-      qib: item["QIB (x)"] || "-",
-      nii: item["NII (x)"] || "-",
-      retail: item["Retail (x)"] || "-",
-      total: item["Total (x)"] || "-",
-      applications: item["Applications"] || "-",
+      companyName: `${item["Company Name"] || "-"}`,
+      href: `${item["~URLRewrite_Folder_Name"] || null}`,
+      close: `${item["Close Date"] || "-"}`,
+      open: `${item["Open Date"] || "-"}`,
+      size: `${item["Size (Rs Cr)"] || "-"}`,
+      qib: `${item["QIB (x)"] || "-"}`,
+      nii: `${item["NII (x)"] || "-"}`,
+      retail: `${item["Retail (x)"] || "-"}`,
+      total: `${item["Total (x)"] || "-"}`,
+      applications: `${item["Applications"] || "-"}`
     }));
-
+    
     res.json({ success: true, data: tableData });
   } catch (error) {
     console.error("Error fetching IPO data:", error.message);

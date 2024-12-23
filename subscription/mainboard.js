@@ -59,21 +59,22 @@ router.get("/", async (req, res) => {
       });
     }
 
-    const tableData = response.reportTableData.map((item) => ({
-      companyName: item["Company Name"] || "-",
-      href: item["~URLRewrite_Folder_Name"] || null,
-      closeDate: item["Close Date"] || "-",
-      size: item["Size (Rs Cr)"] || "-",
-      qib: item["QIB (x)"] || "-",
-      snii: item["sNII (x)"] || "-",
-      bnni: item["bNII (x)"] || "-",
-      nii: item["NII (x)"] || "-",
-      retail: item["Retail (x)"] || "-",
-      employee: item["Employee (x)"] || "-",
-      others: item["Others (x)"] || "-",
-      total: item["Total (x)"] || "-",
-      applications: item["Applications"] || "-",
+    const tableData = response.reportTableData.map((item) => ({ 
+      companyName: `${item["Company Name"] || "-"}`, 
+      href: `${item["~URLRewrite_Folder_Name"] || null}`, 
+      closeDate: `${item["Close Date"] || "-"}`, 
+      size: `${item["Size (Rs Cr)"] || "-"}`, 
+      qib: `${item["QIB (x)"] || "-"}`, 
+      snii: `${item["sNII (x)"] || "-"}`, 
+      bnni: `${item["bNII (x)"] || "-"}`, 
+      nii: `${item["NII (x)"] || "-"}`, 
+      retail: `${item["Retail (x)"] || "-"}`, 
+      employee: `${item["Employee (x)"] || "-"}`, 
+      others: `${item["Others (x)"] || "-"}`, 
+      total: `${item["Total (x)"] || "-"}`, 
+      applications: `${item["Applications"] || "-"}`
     }));
+    
 
     res.json({ success: true, data: tableData });
   } catch (error) {
