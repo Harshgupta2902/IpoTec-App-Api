@@ -41,6 +41,10 @@ router.get("/", async (req, res) => {
         path: "/contact-us",
       },
       {
+        key: "Rate Us",
+        path: "/rateUs",
+      },
+      {
         key: "Share with Friends",
         path: "/share",
       },

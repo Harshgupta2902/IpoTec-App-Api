@@ -144,13 +144,13 @@ const ipoData = data.reportTableData || [];
       // Format dates
       const openDate = ipo["~Issue_Open_Date"]
         ? moment(ipo["~Issue_Open_Date"], "YYYY-MM-DD").format("MMM DD, YYYY")
-        : null;
+        : "NA";
       const closeDate = ipo["~Issue_Close_Date"]
         ? moment(ipo["~Issue_Close_Date"], "YYYY-MM-DD").format("MMM DD, YYYY")
-        : null;
+        : "NA";
       const listingDate = ipo["~ListingDate"]
         ? moment(ipo["~ListingDate"], "YYYY-MM-DD").format("MMM DD, YYYY")
-        : null;
+        : "NA";
 
       return {
         companyName: ipo["~compare_name"],
@@ -159,9 +159,9 @@ const ipoData = data.reportTableData || [];
         open: openDate,
         close: closeDate,
         listing: listingDate,
-        price: ipo["Issue Price (Rs)"] || null,
-        size: ipo["Issue Size (Rs Cr.)"] || null,
-        lot: ipo["Lot Size"] || null,
+        price: ipo["Issue Price (Rs)"] || "-",
+        size: ipo["Issue Size (Rs Cr.)"] || "-",
+        lot: ipo["Lot Size"] || "-",
         exchange: ipo["Exchange"]
           ? ipo["Exchange"].split(",").map((e) => e.trim())
           : [],
