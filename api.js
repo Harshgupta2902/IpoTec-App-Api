@@ -80,7 +80,10 @@ const blogs = require("./ipo/common/blogs");
 const topGainers = require("./mf/gainers/top_gainers");
 const topLosers = require("./mf/gainers/top_losers");
 const mfScreener = require("./mf/screener/screener");
-const search = require("./mf/search/search");
+const stockGainers = require("./stocks/gainers/stock_gainers");
+const mfGainers = require("./stocks/gainers/mf_gainers");
+const news = require("./stocks/events/news");
+const search = require("./search/search");
 
 // -------------------------------------------------------------------------------------------------------
 
@@ -117,6 +120,9 @@ app.use("/app/blogs", cacheMiddleware, blogs);
 app.use("/app/mf/topGainers", cacheMiddleware, topGainers);
 app.use("/app/mf/topLosers", cacheMiddleware, topLosers);
 app.use("/app/mf/mfScreener", cacheMiddleware, mfScreener);
+app.use("/app/mf/stockGainers", stockGainers);
+app.use("/app/mf/mfGainers", mfGainers);
+app.use("/app/mf/news", news);
 app.use("/app/mf/search", search);
 
 
