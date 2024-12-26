@@ -1,43 +1,53 @@
 const express = require("express");
 const router = express.Router();
 const axios = require("axios");
-const cheerio = require("cheerio");
+const moment = require("moment");
 
 router.get("/", async (req, res) => {
   try {
-    const { data } = await axios.get(
-      "https://www.chittorgarh.com/ipo/ipo_perf_tracker.asp?year=2024"
+    const response = await axios.get(
+      "https://www.chittorgarh.com/ipo/ipo_perf_tracker.asp?exchange=mainline&year=2024&_rsc=1am2x"
     );
-    const $ = cheerio.load(data);
+    const rawData = response.data;
+    const matches = rawData.match(/"performancesDetails":\[(.*?)]/);
+    if (!matches || matches.length < 2) {
+      throw new Error("Could not find performancesDetails in the response.");
+    }
 
-    const ipoData = [];
+    const performancesDetailsJson = JSON.parse(`[${matches[1]}]`).map(
+      (detail) => ({
+        id: `${detail.ipo_id}`,
+        companyName: `${detail.ipo_company_name}`,
+        faceValue: `${detail.ipo_face_value}`,
+        issuePrice: `${detail.ipo_issue_price_final}`,
+        href: `${detail.ipo_urlrewrite_folder_name}`,
+        listingDate: moment(detail.il_ipo_listing_date).format("MMM DD, YYYY"),
+        
+        bseScriptCode: `${detail.il_bse_script_code}`,
+        nseScriptSymbol: `${detail.il_nse_script_symbol}`,
+        closePrice: `${detail.ildt_close_price}`,
+        bseClose: `${detail.bse_close}`,
+        bsePrevClose: `${detail.bse_prevclose}`,
+        bseOpen: `${detail.bse_open}`,
+        bseHigh: `${detail.bse_high}`,
+        bseLow: `${detail.bse_low}`,
+        bseShares: `${detail.bse_no_of_shrs}`,
+        nseClose: `${detail.nse_close}`,
+        nsePrevClose: `${detail.nse_prevclose}`,
+        nseOpen: `${detail.nse_open}`,
+        nseHigh: `${detail.nse_high}`,
+        nseLow: `${detail.nse_low}`,
+        changeToday: `${detail.change_today}`,
+        changePercentageToday: `${detail.change_in_percentage_today}`,
+        changePercentageListingDay: `${detail.change_in_percentage_listing_day}`,
+        profitLoss: `${detail.ipo_profit_loss}`,
+        issueSizeAmount: `${detail.ipo_issue_size_in_amt}`,
+      })
+    );
 
-    $("table.table tbody tr").each((i, el) => {
-      const row = $(el);
+    console.log("Extracted IPO Performance Details:");
 
-      if (row.find("td[colspan]").length) return;
-
-      const companyName = row.find("td:nth-child(1) b").text().trim();
-      if (!companyName) return;
-      const ipoDetailHref = row.find("td:nth-child(1) a:contains('IPO Detail')").attr("href").replaceAll("https://www.chittorgarh.com/ipo/", "");
-      const listedOn = row.find("td:nth-child(2)").text().trim();
-      const issuePrice = row.find("td:nth-child(3)").text().trim();
-      const listingDayClose = row.find("td:nth-child(4)").text().trim();
-      const listingDayGain = row.find("td:nth-child(5)").text().trim();
-      const currentPrice = row.find("td:nth-child(6)").text().trim();
-      const profitLoss = row.find("td:nth-child(7)").text().trim();
-      ipoData.push({
-        companyName,
-        listedOn,
-        issuePrice,
-        listingDayClose,
-        listingDayGain,
-        currentPrice,
-        profitLoss,
-        href: ipoDetailHref
-      });
-    });
-    res.json({ status: true, data: ipoData });
+    res.json({ status: true, data: performancesDetailsJson });
   } catch (error) {
     console.error("Error fetching IPO data:", error);
   }
