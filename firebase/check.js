@@ -1,7 +1,7 @@
 const cheerio = require("cheerio");
 const axios = require("axios");
-const { sendNotification } = require("./fcm");
-const { db } = require("./firebase");
+const {sendNotificationToTopic } = require("./fcm");
+// const { db } = require("./firebase");
 
 let lastPost = null;
 
@@ -66,22 +66,30 @@ async function checkForLatestPost() {
         },
       };
 
-      const usersSnapshot = await db.collection("userData").get();
-      const users = usersSnapshot.docs.map((doc) => doc.data());
 
-      for (const user of users) {
-        const token = user.token;
-        if (token) {
-          try {
-            const response = await sendNotification(token, messageTemplate);
-            console.log(`Notification sent to user with token: ${user.displayName}`);
-          } catch (error) {
-            console.log(`Error sending notification to token ${user.displayName}:`, error);
-          }
-        } else {
-          console.log(`No FCM token found for user: ${user.uid}`);
-        }
+      try {
+        const response = await sendNotificationToTopic(messageTemplate);
+        console.log(`Notification sent to Topic notification`);
+      } catch (error) {
+        console.log(`Error sending notification`, error);
       }
+
+      // const usersSnapshot = await db.collection("userData").get();
+      // const users = usersSnapshot.docs.map((doc) => doc.data());
+
+      // for (const user of users) {
+      //   const token = user.token;
+      //   if (token) {
+      //     try {
+      //       const response = await sendNotification(token, messageTemplate);
+      //       console.log(`Notification sent to user with token: ${user.displayName}`);
+      //     } catch (error) {
+      //       console.log(`Error sending notification to token ${user.displayName}:`, error);
+      //     }
+      //   } else {
+      //     console.log(`No FCM token found for user: ${user.uid}`);
+      //   }
+      // }
     } else {
       console.log("No new post detected.");
       return { message: "No new post detected" };
