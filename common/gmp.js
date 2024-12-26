@@ -64,6 +64,8 @@ router.get("/", async (req, res) => {
 
       if (match) {
         ipo.href = match.href;
+      }else{
+        ipo.href = "";
       }
     });
 
