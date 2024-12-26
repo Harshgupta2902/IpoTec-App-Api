@@ -183,8 +183,8 @@ const ipoData = data.reportTableData || [];
       filteredIPOs = parsedIPOs.filter((ipo) => {
         return (
           ipo.open &&
-          ipo.close &&
-          today.isBetween(moment(ipo.open, "MMM DD, YYYY"), moment(ipo.close, "MMM DD, YYYY"), null, "[]")
+          ipo.listing &&
+          today.isBetween(moment(ipo.open, "MMM DD, YYYY"), moment(ipo.listing, "MMM DD, YYYY"), null, "[]")
         );
       });
     } else if (type === "past") {
