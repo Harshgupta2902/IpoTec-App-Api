@@ -47,30 +47,45 @@ app.use((req, res, next) => {
 });
 // -------------------------------------------------------------------------------------------------------
 
-const defaultApi = require("./common/default");
+const defaultApi = require("./ipo/common/default");
 
-const mainboard = require("./mainboard/current");
-const sme = require("./mainboard/sme");
-const details = require("./mainboard/ipo_details");
 
-const mainSubs = require("./subscription/mainboard");
-const smeSubs = require("./subscription/sme");
-const gmp = require("./common/gmp");
 
-const mainBoardCalendar = require("./calendar/mainboard_calendar");
-const smeCalendar = require("./calendar/sme_calendar");
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////       IPO API           /////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 
-const performance = require("./ipo_history/performance");
-const mostsuccessfulipo = require("./ipo_history/most_successful_ipo");
-const leastsuccessfulipo = require("./ipo_history/least_successful_ipo");
+const mainboard = require("./ipo/mainboard/current");
+const sme = require("./ipo/mainboard/sme");
+const details = require("./ipo/mainboard/ipo_details");
 
-// const checkBlogs = require("./firebase/check");
-// const checkevents = require("./firebase/checkevents");
+const mainSubs = require("./ipo/subscription/mainboard");
+const smeSubs = require("./ipo/subscription/sme");
+const gmp = require("./ipo/common/gmp");
 
-const blogs = require("./common/blogs");
+const mainBoardCalendar = require("./ipo/calendar/mainboard_calendar");
+const smeCalendar = require("./ipo/calendar/sme_calendar");
+
+const performance = require("./ipo/ipo_history/performance");
+const mostsuccessfulipo = require("./ipo/ipo_history/most_successful_ipo");
+const leastsuccessfulipo = require("./ipo/ipo_history/least_successful_ipo");
+
+const blogs = require("./ipo/common/blogs");
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////       MUTUAL FUNDS API           //////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+const topGainers = require("./mf/gainers/top_gainers");
 
 // -------------------------------------------------------------------------------------------------------
 
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////       IPO API           /////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 app.use("/app/default", cacheMiddleware, defaultApi);
 
 app.use("/app/mainboard", cacheMiddleware, mainboard);
@@ -89,10 +104,15 @@ app.use("/app/performance", cacheMiddleware, performance);
 app.use("/app/mostsuccessfulipo", cacheMiddleware, mostsuccessfulipo);
 app.use("/app/leastsuccessfulipo", cacheMiddleware, leastsuccessfulipo);
 
-// app.use("/app/checkBlogs", cacheMiddleware, checkBlogs);
-// app.use("/app/checkevents", cacheMiddleware, checkevents);
-
 app.use("/app/blogs", cacheMiddleware, blogs);
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////       MUTUAL FUNDS API           //////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+app.use("/app/mf/topGainers", cacheMiddleware, topGainers);
+
 
 // -------------------------------------------------------------------------------------------------------
 app.get("/", (req, res) => {
@@ -118,16 +138,16 @@ cron.schedule("0 12 * * *", async () => {
   await smeNotifications();
 });
 
-app.listen(3001, () => {
-  console.log(`Server is running on http://localhost:${3001}/app/`);
+app.listen(3002, () => {
+  console.log(`Server is running on http://localhost:${3002}/app/`);
   (async () => {
     try {
-      await checkForLatestPost();
-      setInterval(() => {
-        const currentTime = new Date().toLocaleString();
-        console.log(`Checking for new posts at ${currentTime}...`);
-        checkForLatestPost();
-      }, 300000);
+      // await checkForLatestPost();
+      // setInterval(() => {
+      //   const currentTime = new Date().toLocaleString();
+      //   console.log(`Checking for new posts at ${currentTime}...`);
+      //   checkForLatestPost();
+      // }, 300000);
     } catch (error) {
       console.error("Error hitting /app/checkBlogs:", error.message);
     }
