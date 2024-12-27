@@ -40,17 +40,6 @@ router.get("/", async (req, res) => {
           const dateParts = rawDate.match(
             /(\w+) (\d+), (\d{4}) (\d{2}):(\d{2}) ([APM]+) IST/
           );
-
-          // if (dateParts) {
-          //   // Manually constructing the date in "14 Oct, 24 02:06 PM" format
-          //   const [, month, day, year, hours, minutes, ampm] = dateParts;
-          //   const shortYear = year.slice(2);
-          //   const shortMonth = new Date(`${month} 1`).toLocaleString("en-us", {
-          //     month: "short",
-          //   });
-          //   formattedDate = `${day} ${shortMonth},${shortYear} ${hours}:${minutes} ${ampm}`;
-          // }
-
           if (dateParts) {
             const [, month, day, year, hours, minutes, ampm] = dateParts;
 
