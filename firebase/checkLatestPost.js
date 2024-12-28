@@ -49,14 +49,7 @@ async function checkForLatestPost() {
     if (lastPost === null || lastPost.title !== newPost.title) {
       console.log("New post detected:");
       console.log(`Title: ${newPost.title}`);
-      console.log(`Title: ${newPost.subtitle}`);
-      console.log(`Link: ${newPost.link}`);
-      console.log(`Image: ${newPost.image}`);
-      console.log(`Date: ${newPost.date}`);
-      console.log("--------------------------------");
-
       lastPost = newPost;
-
       const messageTemplate = {
         notification: {
           title: newPost.title,
@@ -65,30 +58,12 @@ async function checkForLatestPost() {
         },
       };
 
-
       try {
         const response = await sendNotificationToTopic(messageTemplate);
         console.log(`Notification sent to Topic notification`);
       } catch (error) {
         console.log(`Error sending notification`, error);
       }
-
-      // const usersSnapshot = await db.collection("userData").get();
-      // const users = usersSnapshot.docs.map((doc) => doc.data());
-
-      // for (const user of users) {
-      //   const token = user.token;
-      //   if (token) {
-      //     try {
-      //       const response = await sendNotification(token, messageTemplate);
-      //       console.log(`Notification sent to user with token: ${user.displayName}`);
-      //     } catch (error) {
-      //       console.log(`Error sending notification to token ${user.displayName}:`, error);
-      //     }
-      //   } else {
-      //     console.log(`No FCM token found for user: ${user.uid}`);
-      //   }
-      // }
     } else {
       console.log("No new post detected.");
       return { message: "No new post detected" };
@@ -98,14 +73,4 @@ async function checkForLatestPost() {
     return { message: "Error checking for latest post", error: error.message };
   }
 }
-
-// router.get("/", async (req, res) => {
-//   await checkForLatestPost();
-//   setInterval(() => {
-//     const currentTime = new Date().toLocaleString();
-//     console.log(`Checking for new posts at ${currentTime}...`);
-//     checkForLatestPost();
-//   }, 300000);
-// });
-
 module.exports = { checkForLatestPost };

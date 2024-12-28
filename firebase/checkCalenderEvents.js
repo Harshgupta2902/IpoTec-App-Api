@@ -75,12 +75,10 @@ const fetchCalendarEvents = async (url) => {
 };
 
 const sendNotificationsToUsers = async (title, events) => {
-  const body = formatNotificationBody(events);
-
   const messageTemplate = {
     notification: {
       title: title,
-      body: body,
+      body: formatNotificationBody(events),
     },
   };
 
