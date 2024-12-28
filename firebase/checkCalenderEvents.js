@@ -1,7 +1,6 @@
 const axios = require("axios");
 const cheerio = require("cheerio");
-const { sendNotification, sendNotificationToTopic } = require("./fcm");
-const { db } = require("./firebase");
+const { sendNotificationToTopic } = require("./fcm");
 
 const smeNotifications = async () => {
   try {
@@ -88,27 +87,6 @@ const sendNotificationsToUsers = async (title, events) => {
   try {
     await sendNotificationToTopic(messageTemplate);
     console.log(`Notification sent to To Tpoic notification`);
-    // const usersSnapshot = await db.collection("userData").get();
-    // const users = usersSnapshot.docs.map((doc) => doc.data());
-
-    // for (const user of users) {
-    //   const token = user.token;
-    //   if (token) {
-    //     try {
-    //       await sendNotification(token, messageTemplate);
-    //       console.log(
-    //         `Notification sent to user with token: ${user.displayName}`
-    //       );
-    //     } catch (error) {
-    //       console.log(
-    //         `Error sending notification to token ${user.displayName}:`,
-    //         error
-    //       );
-    //     }
-    //   } else {
-    //     console.log(`No FCM token found for user: ${user.uid}`);
-    //   }
-    // }
   } catch (error) {
     console.error("Error sending notifications:", error.message);
   }

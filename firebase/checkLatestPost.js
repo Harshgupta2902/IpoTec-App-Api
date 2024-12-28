@@ -1,7 +1,6 @@
 const cheerio = require("cheerio");
 const axios = require("axios");
 const {sendNotificationToTopic } = require("./fcm");
-// const { db } = require("./firebase");
 
 let lastPost = null;
 
