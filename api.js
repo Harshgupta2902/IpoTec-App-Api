@@ -4,12 +4,9 @@ const NodeCache = require("node-cache");
 const cron = require("node-cron");
 const cache = new NodeCache({ stdTTL: 3600 });
 require("dotenv").config();
-const {
-  mainBoardNotifications,
-  smeNotifications,
-} = require("./firebase/checkevents");
+const {mainBoardNotifications,smeNotifications} = require("./firebase/checkCalenderEvents");
 
-const { checkForLatestPost } = require("./firebase/check");
+const { checkForLatestPost } = require("./fireba\se/checkLatestPost");
 
 const cacheMiddleware = (req, res, next) => {
   const key = req.originalUrl;
@@ -49,8 +46,6 @@ app.use((req, res, next) => {
 
 const defaultApi = require("./ipo/common/default");
 
-
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////       IPO API           /////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -72,7 +67,6 @@ const leastsuccessfulipo = require("./ipo/ipo_history/least_successful_ipo");
 
 const blogs = require("./ipo/common/blogs");
 
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////       MUTUAL FUNDS API           //////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -84,10 +78,9 @@ const stockGainers = require("./stocks/gainers/stock_gainers");
 const mfGainers = require("./stocks/gainers/mf_gainers");
 const news = require("./stocks/events/news");
 const search = require("./search/search");
+const { checkLatestNews } = require("./firebase/checkNews");
 
 // -------------------------------------------------------------------------------------------------------
-
-
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////       IPO API           /////////////////////////////////////
@@ -112,7 +105,6 @@ app.use("/app/leastsuccessfulipo", cacheMiddleware, leastsuccessfulipo);
 
 app.use("/app/blogs", cacheMiddleware, blogs);
 
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////       MUTUAL FUNDS API           //////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -124,7 +116,6 @@ app.use("/app/mf/stockGainers", stockGainers);
 app.use("/app/mf/mfGainers", mfGainers);
 app.use("/app/mf/news", news);
 app.use("/app/mf/search", search);
-
 
 // -------------------------------------------------------------------------------------------------------
 app.get("/", (req, res) => {
@@ -150,18 +141,21 @@ cron.schedule("0 12 * * *", async () => {
   await smeNotifications();
 });
 
-app.listen(3002, () => {
-  console.log(`Server is running on http://localhost:${3002}/app/`);
+app.listen(3001, () => {
+  console.log(`Server is running on http://localhost:${3001}/app/`);
   (async () => {
     try {
-      // await checkForLatestPost();
-      // setInterval(() => {
-      //   const currentTime = new Date().toLocaleString();
-      //   console.log(`Checking for new posts at ${currentTime}...`);
-      //   checkForLatestPost();
-      // }, 300000);
+      await checkForLatestPost();
+      await checkLatestNews()
+      setInterval(() => {
+        const currentTime = new Date().toLocaleString();
+        console.log(`Checking for new posts at ${currentTime}...`);
+        checkForLatestPost();
+        checkLatestNews();
+      }, 300000);
     } catch (error) {
       console.error("Error hitting /app/checkBlogs:", error.message);
     }
+
   })();
 });
