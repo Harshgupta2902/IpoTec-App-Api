@@ -124,9 +124,7 @@ router.get("/", async (req, res) => {
     }
 
     res.json({ success: true, data: transformedData, message: "Data Fetched" });
-    // res.json({ success: true, data: type === "etf"? response.data.data.results: response.data.data.result, message: "Data Fetched" });
   } catch (error) {
-    // console.error("Error fetching data:", error);
     res.status(500).json({
       success: false,
       message: "Failed to fetch data from TickerTape",
