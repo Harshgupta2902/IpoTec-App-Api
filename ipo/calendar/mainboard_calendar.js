@@ -23,10 +23,10 @@ router.get("/", async (req, res) => {
             events.push({ eventText, eventLink });
           }
         });
-        // if (day) {
-        //   calendarEvents.push({ day, events });
-        // }
-        calendarEvents.push({ day, events });
+        if (day) { // Only add to the list if the day is not empty
+          calendarEvents.push({ day, events });
+        }
+        // calendarEvents.push({ day, events });
     });
     res.json({ success: true, data: calendarEvents });
   } catch (error) {

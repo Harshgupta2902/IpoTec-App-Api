@@ -5,8 +5,11 @@ const cron = require("node-cron");
 const cache = new NodeCache({ stdTTL: 3600 });
 require("dotenv").config();
 const {mainBoardNotifications,smeNotifications} = require("./firebase/checkCalenderEvents");
-
+const { checkLatestNews } = require("./firebase/checkNews");
 const { checkForLatestPost } = require("./fireba\se/checkLatestPost");
+
+
+
 
 const cacheMiddleware = (req, res, next) => {
   const key = req.originalUrl;
@@ -78,7 +81,6 @@ const stockGainers = require("./stocks/gainers/stock_gainers");
 const mfGainers = require("./stocks/gainers/mf_gainers");
 const news = require("./stocks/events/news");
 const search = require("./search/search");
-const { checkLatestNews } = require("./firebase/checkNews");
 
 // -------------------------------------------------------------------------------------------------------
 
@@ -141,21 +143,21 @@ cron.schedule("0 12 * * *", async () => {
   await smeNotifications();
 });
 
-app.listen(3002, () => {
-  console.log(`Server is running on http://localhost:${3002}/app/`);
+app.listen(3001, () => {
+  console.log(`Server is running on http://localhost:${3001}/app/`);
   (async () => {
-    // try {
-    //   await checkForLatestPost();
-    //   await checkLatestNews()
-    //   setInterval(() => {
-    //     const currentTime = new Date().toLocaleString();
-    //     console.log(`Checking for new posts at ${currentTime}...`);
-    //     checkForLatestPost();
-    //     checkLatestNews();
-    //   }, 300000);
-    // } catch (error) {
-    //   console.error("Error hitting /app/checkBlogs:", error.message);
-    // }
+    try {
+      await checkForLatestPost();
+      await checkLatestNews()
+      setInterval(() => {
+        const currentTime = new Date().toLocaleString();
+        console.log(`Checking for new posts at ${currentTime}...`);
+        checkForLatestPost();
+        checkLatestNews();
+      }, 300000);
+    } catch (error) {
+      console.error("Error hitting /app/checkBlogs:", error.message);
+    }
 
   })();
 });
