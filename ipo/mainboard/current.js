@@ -209,45 +209,6 @@ router.get("/", async (req, res) => {
     //   });
     // }
 
-    // Filter out data older than 6 months
-    const validIPOs = parsedIPOs.filter((ipo) => {
-      const listingDate = ipo.listing ? moment(ipo.listing, "MMM DD, YYYY") : null;
-      const openDate = ipo.open ? moment(ipo.open, "MMM DD, YYYY") : null;
-      return (
-        (listingDate && listingDate.isAfter(sixMonthsAgo)) ||
-        (openDate && openDate.isAfter(sixMonthsAgo))
-      );
-    });
-
-    if (type === "all") {
-      filteredIPOs = validIPOs.map((ipo) => ({
-        name: cleanName(ipo.companyName),
-        href: ipo.href,
-      }));
-    } else if (type === "upcoming") {
-      filteredIPOs = validIPOs.filter((ipo) => {
-        return ipo.open && moment(ipo.open, "MMM DD, YYYY").isAfter(today);
-      });
-    } else if (type === "current") {
-      filteredIPOs = validIPOs.filter((ipo) => {
-        return (
-          ipo.open &&
-          ipo.listing &&
-          today.isBetween(moment(ipo.open, "MMM DD, YYYY"), moment(ipo.listing, "MMM DD, YYYY"), null, "[]")
-        );
-      });
-    } else if (type === "past") {
-      filteredIPOs = validIPOs.filter((ipo) => {
-        return ipo.listing && moment(ipo.listing, "MMM DD, YYYY").isBefore(today);
-      });
-    } else {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid type. Use 'upcoming', 'current', or 'past'.",
-      });
-    }
-
-
     filteredIPOs.sort((a, b) => {
       const dateA = a.open || moment(0);
       const dateB = b.open || moment(0);
