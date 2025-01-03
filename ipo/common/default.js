@@ -20,10 +20,10 @@ router.get("/", async (req, res) => {
         key: "SME Ipo Calendar",
         path: "/smeCalendar",
       },
-      {
-        key: "Ipo Performance",
-        path: "/performance",
-      },
+      // {
+      //   key: "Ipo Performance",
+      //   path: "/performance",
+      // },
       {
         key: "Most Successful Ipo",
         path: "/mostSuccessIpo",
