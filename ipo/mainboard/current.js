@@ -133,13 +133,15 @@ router.get("/", async (req, res) => {
 
   const today = moment();
   let filteredIPOs = [];
+  const sixMonthsAgo = today.clone().subtract(6, "months");
 
   try {
-    const { data } = await axios.get(
-      "https://webnodejs.chittorgarh.com/cloud/report/data-read/83/1/12/2024/2024-25/0/0?search="
-    );
+    const [data1, data2] = await Promise.all([
+      axios.get("https://webnodejs.chittorgarh.com/cloud/report/data-read/83/1/12/2024/2024-25/0/0?search="),
+      axios.get("https://webnodejs.chittorgarh.com/cloud/report/data-read/83/1/1/2025/2024-25/0/0?search=")
+    ]);
 
-    const ipoData = data.reportTableData || [];
+    const ipoData = [...data1.data.reportTableData, ...data2.data.reportTableData];
     const parsedIPOs = ipoData.map((ipo) => {
       // Format dates
       const openDate = ipo["~Issue_Open_Date"]
@@ -154,8 +156,10 @@ router.get("/", async (req, res) => {
 
       return {
         companyName: ipo["~compare_name"],
-        href: ipo["Issuer Company"]
-          .match(/href="([^"]+)"/)?.[1].replaceAll("https://www.chittorgarh.com/ipo/", "") || null,
+        href:
+          ipo["Issuer Company"]
+            .match(/href="([^"]+)"/)?.[1]
+            .replaceAll("https://www.chittorgarh.com/ipo/", "") || null,
         open: openDate,
         close: closeDate,
         listing: listingDate,
@@ -170,17 +174,62 @@ router.get("/", async (req, res) => {
 
     const cleanName = (name) => name.replace(/ Limited IPO$/i, "");
 
+    // if (type === "all") {
+    //   filteredIPOs = parsedIPOs.map((ipo) => ({
+    //     name: cleanName(ipo.companyName),
+    //     href: ipo.href,
+    //   }));
+    // } else if (type === "upcoming") {
+    //   filteredIPOs = parsedIPOs.filter((ipo) => {
+    //     return ipo.open && moment(ipo.open, "MMM DD, YYYY").isAfter(today);
+    //   });
+    // } else if (type === "current") {
+    //   filteredIPOs = parsedIPOs.filter((ipo) => {
+    //     return (
+    //       ipo.open &&
+    //       ipo.listing &&
+    //       today.isBetween(
+    //         moment(ipo.open, "MMM DD, YYYY"),
+    //         moment(ipo.listing, "MMM DD, YYYY"),
+    //         null,
+    //         "[]"
+    //       )
+    //     );
+    //   });
+    // } else if (type === "past") {
+    //   filteredIPOs = parsedIPOs.filter((ipo) => {
+    //     return (
+    //       ipo.listing && moment(ipo.listing, "MMM DD, YYYY").isBefore(today)
+    //     );
+    //   });
+    // } else {
+    //   return res.status(400).json({
+    //     success: false,
+    //     message: "Invalid type. Use 'upcoming', 'current', or 'past'.",
+    //   });
+    // }
+
+    // Filter out data older than 6 months
+    const validIPOs = parsedIPOs.filter((ipo) => {
+      const listingDate = ipo.listing ? moment(ipo.listing, "MMM DD, YYYY") : null;
+      const openDate = ipo.open ? moment(ipo.open, "MMM DD, YYYY") : null;
+      return (
+        (listingDate && listingDate.isAfter(sixMonthsAgo)) ||
+        (openDate && openDate.isAfter(sixMonthsAgo))
+      );
+    });
+
     if (type === "all") {
-      filteredIPOs = parsedIPOs.map((ipo) => ({
+      filteredIPOs = validIPOs.map((ipo) => ({
         name: cleanName(ipo.companyName),
         href: ipo.href,
       }));
     } else if (type === "upcoming") {
-      filteredIPOs = parsedIPOs.filter((ipo) => {
+      filteredIPOs = validIPOs.filter((ipo) => {
         return ipo.open && moment(ipo.open, "MMM DD, YYYY").isAfter(today);
       });
     } else if (type === "current") {
-      filteredIPOs = parsedIPOs.filter((ipo) => {
+      filteredIPOs = validIPOs.filter((ipo) => {
         return (
           ipo.open &&
           ipo.listing &&
@@ -188,7 +237,7 @@ router.get("/", async (req, res) => {
         );
       });
     } else if (type === "past") {
-      filteredIPOs = parsedIPOs.filter((ipo) => {
+      filteredIPOs = validIPOs.filter((ipo) => {
         return ipo.listing && moment(ipo.listing, "MMM DD, YYYY").isBefore(today);
       });
     } else {
@@ -197,6 +246,7 @@ router.get("/", async (req, res) => {
         message: "Invalid type. Use 'upcoming', 'current', or 'past'.",
       });
     }
+
 
     filteredIPOs.sort((a, b) => {
       const dateA = a.open || moment(0);
