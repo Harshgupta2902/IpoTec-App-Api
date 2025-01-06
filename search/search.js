@@ -14,9 +14,10 @@ router.get("/", async (req, res) => {
     ? "stock,index,etf,mutualfund,smallcase,gold"
     : type;
 
-  // Construct the URL with the dynamic types
-  const url = `https://api.tickertape.in/search?text=${text}&types=${types}&pageNumber=0`;
-  
+    // Construct the URL with the dynamic types
+    const url = `https://api.tickertape.in/search?text=${text}&types=${types}&pageNumber=0`;
+    console.log(url);
+    
     const response = await axios.get(url);
     const limitedData = response.data.data.stocks.slice(0, 10);
 

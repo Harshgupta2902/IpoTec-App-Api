@@ -80,7 +80,8 @@ const mfScreener = require("./mf/screener/screener");
 const stockGainers = require("./stocks/gainers/stock_gainers");
 const mfGainers = require("./stocks/gainers/mf_gainers");
 const news = require("./stocks/events/news");
-const search = require("./search/search");
+// const search = require("./search/search");
+const tape = require("./search/tape");
 
 // -------------------------------------------------------------------------------------------------------
 
@@ -117,7 +118,8 @@ app.use("/app/mf/mfScreener", cacheMiddleware, mfScreener);
 app.use("/app/mf/stockGainers", stockGainers);
 app.use("/app/mf/mfGainers", mfGainers);
 app.use("/app/mf/news", news);
-app.use("/app/mf/search", search);
+// app.use("/app/mf/search", search);
+app.use("/app/mf/tape", tape);
 
 // -------------------------------------------------------------------------------------------------------
 app.get("/", (req, res) => {
@@ -143,8 +145,8 @@ cron.schedule("0 12 * * *", async () => {
   await smeNotifications();
 });
 
-app.listen(3002, () => {
-  console.log(`Server is running on http://localhost:${3002}/app/`);
+app.listen(3001, () => {
+  console.log(`Server is running on http://localhost:${3001}/app/`);
   (async () => {
     try {
       await checkForLatestPost();
@@ -157,7 +159,7 @@ app.listen(3002, () => {
       }, 300000);
     } catch (error) {
       console.error("Error hitting /app/checkBlogs:", error.message);
-    }
+    }X
 
   })();
 });
