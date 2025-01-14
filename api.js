@@ -82,6 +82,7 @@ const mfGainers = require("./stocks/gainers/mf_gainers");
 const news = require("./stocks/events/news");
 // const search = require("./search/search");
 const tape = require("./search/tape");
+const mmi = require("./stocks/mmi");
 
 // -------------------------------------------------------------------------------------------------------
 
@@ -120,6 +121,7 @@ app.use("/app/mf/mfGainers", mfGainers);
 app.use("/app/mf/news", news);
 // app.use("/app/mf/search", search);
 app.use("/app/mf/tape", tape);
+app.use("/app/mmi", mmi);
 
 // -------------------------------------------------------------------------------------------------------
 app.get("/", (req, res) => {
@@ -145,21 +147,21 @@ cron.schedule("0 12 * * *", async () => {
   await smeNotifications();
 });
 
-app.listen(3001, () => {
-  console.log(`Server is running on http://localhost:${3001}/app/`);
+app.listen(3002, () => {
+  console.log(`Server is running on http://localhost:${3002}/app/`);
   (async () => {
-    try {
-      await checkForLatestPost();
-      await checkLatestNews()
-      setInterval(() => {
-        const currentTime = new Date().toLocaleString();
-        console.log(`Checking for new posts at ${currentTime}...`);
-        checkForLatestPost();
-        checkLatestNews();
-      }, 300000);
-    } catch (error) {
-      console.error("Error hitting /app/checkBlogs:", error.message);
-    }X
+    // try {
+    //   await checkForLatestPost();
+    //   await checkLatestNews()
+    //   setInterval(() => {
+    //     const currentTime = new Date().toLocaleString();
+    //     console.log(`Checking for new posts at ${currentTime}...`);
+    //     checkForLatestPost();
+    //     checkLatestNews();
+    //   }, 300000);
+    // } catch (error) {
+    //   console.error("Error hitting /app/checkBlogs:", error.message);
+    // }
 
   })();
 });

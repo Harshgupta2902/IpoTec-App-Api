@@ -19,16 +19,16 @@ router.get("/", async (req, res) => {
       const ipoBadge = $(row).find("span.badge").text().trim();
       const ipoRow = {
         companyName: ipoName.replaceAll(ipoBadge, ""),
-        price: $(columns[1]).text().trim(),
-        gmp: $(columns[2]).text().trim(),
-        estListing: $(columns[3]).text().trim(),
-        ipoSize: $(columns[5]).text().trim(),
-        lot: $(columns[6]).text().trim(),
-        open: $(columns[7]).text().trim(),
-        close: $(columns[8]).text().trim(),
-        boaDate: $(columns[9]).text().trim(),
-        listing: $(columns[10]).text().trim(),
-        updatedAt: $(columns[11]).text().trim(),
+        price: $(columns[2]).text().trim(),
+        gmp: $(columns[3]).text().trim(),
+        estListing: $(columns[5]).text().trim(),
+        ipoSize: $(columns[6]).text().trim(),
+        lot: $(columns[7]).text().trim(),
+        open: $(columns[8]).text().trim(),
+        close: $(columns[9]).text().trim(),
+        boaDate: $(columns[10]).text().trim(),
+        listing: $(columns[11]).text().trim(),
+        updatedAt: $(columns[12]).text().trim(),
       };
 
       ipoData.push(ipoRow);
