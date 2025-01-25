@@ -6,7 +6,7 @@ const cheerio = require("cheerio");
 router.get("/", async (req, res) => {
   try {
     const { data: html } = await axios.get(
-      "https://www.chittorgarh.com/calendar/sme-ipo-calendar/2/?month=12&year=2024"
+      "https://www.chittorgarh.com/calendar/sme-ipo-calendar/2/"
     );
 
     const $ = cheerio.load(html);
