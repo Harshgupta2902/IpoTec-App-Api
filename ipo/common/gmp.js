@@ -80,10 +80,6 @@
 
 // module.exports = router;
 
-
-
-
-
 const express = require("express");
 const router = express.Router();
 const axios = require("axios");
@@ -98,8 +94,8 @@ router.get("/", async (req, res) => {
     const ipoData = responseData.reportTableData.map((item) => {
       return {
         companyName: item.IPO,
-        price: item.Price !== "NA" ? item.Price : "TBD",
-        gmp: item.GMP.replace(/<[^>]*>/g, ""), // Strip HTML tags
+        price: item.Price !== "NA" ? item.Price : "--",
+        gmp: item.GMP.replace(/<[^>]*>/g, ""), 
         estListing: item["Est Listing"].replace(/<[^>]*>/g, ""),
         ipoSize: item["IPO Size"].replace(/&#8377;/g, "Rs"),
         lot: item.Lot,
