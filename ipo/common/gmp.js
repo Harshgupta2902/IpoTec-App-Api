@@ -95,16 +95,16 @@ router.get("/", async (req, res) => {
       return {
         companyName: item.IPO,
         price: item.Price !== "NA" ? item.Price : "--",
-        gmp: item.GMP.replace(/<[^>]*>/g, ""), 
-        estListing: item["Est Listing"].replace(/<[^>]*>/g, ""),
-        ipoSize: item["IPO Size"].replace(/&#8377;/g, "Rs"),
+        gmp: item.GMP ? item.GMP.replace(/<[^>]*>/g, "") : "",
+        estListing: item["Est Listing"] ? item["Est Listing"].replace(/<[^>]*>/g, "") : "",
+        ipoSize: item["IPO Size"] ? item["IPO Size"].replace(/&#8377;/g, "Rs") : "",
         lot: item.Lot,
         open: item.Open,
         close: item.Close,
         boaDate: item["BoA Dt"],
         listing: item.Listing,
         updatedAt: item["GMP Updated"],
-        href: item["~URLRewrite_Folder_Name"].replace("/gmp/", ""),
+        href: item["~URLRewrite_Folder_Name"] ?item["~URLRewrite_Folder_Name"].replace("/gmp/", "") : "",
       };
     });
 
