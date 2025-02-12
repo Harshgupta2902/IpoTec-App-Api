@@ -88,7 +88,7 @@ router.get("/", async (req, res) => {
   try {
     // Fetch data from the new JSON API endpoint
     const { data: responseData } = await axios.get(
-      "https://webnodejs.investorgain.com/cloud/report/data-read/331/1/1/2025/2024-25/0/all?search="
+      "https://webnodejs.investorgain.com/cloud/report/data-read/331/1/2/2025/2024-25/0/all?search="
     );
 
     const ipoData = responseData.reportTableData.map((item) => {
