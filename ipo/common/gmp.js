@@ -27,39 +27,39 @@ router.get("/", async (req, res) => {
     });
 
     // Fetch additional data from mainboard and SME APIs
-    const [mainboardResponse, smeResponse] = await Promise.all([
-      axios.get("https://ipo-tec-app-api.vercel.app/app/mainboard?type=all"),
-      axios.get("https://ipo-tec-app-api.vercel.app/app/sme?type=all"),
-    ]);
+    // const [mainboardResponse, smeResponse] = await Promise.all([
+    //   axios.get("https://ipo-tec-app-api.vercel.app/app/mainboard?type=all"),
+    //   axios.get("https://ipo-tec-app-api.vercel.app/app/sme?type=all"),
+    // ]);
 
-    const additionalData = [
-      ...mainboardResponse.data.data,
-      ...smeResponse.data.data,
-    ];
+    // const additionalData = [
+    //   ...mainboardResponse.data.data,
+    //   ...smeResponse.data.data,
+    // ];
 
-    // Match and add additional href if available
-    ipoData.forEach((ipo) => {
-      const ipoWords = ipo.companyName.toLowerCase().split(" ");
+    // // Match and add additional href if available
+    // ipoData.forEach((ipo) => {
+    //   const ipoWords = ipo.companyName.toLowerCase().split(" ");
 
-      const phrases = [];
-      for (let i = 0; i < ipoWords.length; i++) {
-        if (i + 1 < ipoWords.length) {
-          phrases.push(`${ipoWords[i]} ${ipoWords[i + 1]}`);
-        }
-        if (i + 2 < ipoWords.length) {
-          phrases.push(`${ipoWords[i]} ${ipoWords[i + 1]} ${ipoWords[i + 2]}`);
-        }
-      }
+    //   const phrases = [];
+    //   for (let i = 0; i < ipoWords.length; i++) {
+    //     if (i + 1 < ipoWords.length) {
+    //       phrases.push(`${ipoWords[i]} ${ipoWords[i + 1]}`);
+    //     }
+    //     if (i + 2 < ipoWords.length) {
+    //       phrases.push(`${ipoWords[i]} ${ipoWords[i + 1]} ${ipoWords[i + 2]}`);
+    //     }
+    //   }
 
-      const match = additionalData.find((item) => {
-        const itemName = item.name.toLowerCase();
-        return phrases.some((phrase) => itemName.includes(phrase));
-      });
+    //   const match = additionalData.find((item) => {
+    //     const itemName = item.name.toLowerCase();
+    //     return phrases.some((phrase) => itemName.includes(phrase));
+    //   });
 
-      if (match) {
-        ipo.href = match.href;
-      }
-    });
+    //   if (match) {
+    //     ipo.href = match.href;
+    //   }
+    // });
 
     res.json({ success: true, data: ipoData });
   } catch (error) {
