@@ -88,7 +88,7 @@ they will be able to take the necessary actions.</p></div><!----><br><strong>Sec
       `;
 
     const response = {
-      force_update: 1,
+      force_update: 0,
       soft_update: 1,
       build_no: 14,
       ios_build_no: 1,
