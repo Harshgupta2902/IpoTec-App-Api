@@ -17,80 +17,77 @@ router.get("/", async (req, res) => {
   let filteredIPOs = [];
 
   const sixMonthsAgo = today.clone().subtract(6, "months");
-  
-    try {
-      const [data1, data2] = await Promise.all([
-        axios.get("https://webnodejs.chittorgarh.com/cloud/report/data-read/84/1/12/2024/2024-25/0/0?search="),
-        axios.get("https://webnodejs.chittorgarh.com/cloud/report/data-read/84/1/1/2025/2024-25/0/0?search=")
-      ]);
-  
-      const ipoData = [...data1.data.reportTableData, ...data2.data.reportTableData];
+
+  try {
+    const [data1] = await Promise.all([
+      axios.get("https://webnodejs.investorgain.com/cloud/report/data-read/394/1/5/2025/2025-26/0/sme?search=&v=15-19"),
+    ]);
+
+    const ipoData = data1.data.reportTableData;
     const parsedIPOs = ipoData.map((ipo) => {
-      const openDate = ipo["~Issue_Open_Date"]
-        ? moment(ipo["~Issue_Open_Date"], "YYYY-MM-DD").format("MMM DD, YYYY")
+      const openDate = ipo["~Srt_Open"]
+        ? moment(ipo["~Srt_Open"], "YYYY-MM-DD").format("MMM DD, YYYY")
         : "NA";
-      const closeDate = ipo["~Issue_Close_Date"]
-        ? moment(ipo["~Issue_Close_Date"], "YYYY-MM-DD").format("MMM DD, YYYY")
+      const closeDate = ipo["~Srt_Close"]
+        ? moment(ipo["~Srt_Close"], "YYYY-MM-DD").format("MMM DD, YYYY")
         : "NA";
-      const listingDate = ipo["~ListingDate"]
-        ? moment(ipo["~ListingDate"], "YYYY-MM-DD").format("MMM DD, YYYY")
+      const listingDate = ipo["~Str_Listing"]
+        ? moment(ipo["~Str_Listing"], "YYYY-MM-DD").format("MMM DD, YYYY")
         : "NA";
 
       return {
-        companyName: ipo["~compare_name"],
-        href: ipo["Issuer Company"]
-          .match(/href="([^"]+)"/)?.[1].replaceAll("https://www.chittorgarh.com/ipo/", "") || null,
+        companyName: ipo["IPO"],
+        href:
+          ipo["~URLRewrite_Folder_Name"]
+            .replaceAll("https://www.chittorgarh.com/ipo/", "") || null,
         open: openDate,
         close: closeDate,
         listing: listingDate,
-        price: ipo["Issue Price (Rs)"] || "-",
-        size: ipo["Issue Size (Rs Cr.)"] || "-",
-        lot: ipo["Lot Size"] || "-",
-        exchange: ipo["Exchange"]
-          ? ipo["Exchange"].split(",").map((e) => e.trim())
-          : [],
+        price: ipo["IPO Price"] || "-",
+        size: ipo["IPO Size"].replaceAll("&#8377;", "") || "-",
+        lot: ipo["Lot"] || "-",
+        exchange: [],
       };
     });
 
-    const cleanName = (name) => name.replace(/ Limited IPO$/i, "");
 
     // Filter out data older than 6 months
-        const validIPOs = parsedIPOs.filter((ipo) => {
-          const listingDate = ipo.listing ? moment(ipo.listing, "MMM DD, YYYY") : null;
-          const openDate = ipo.open ? moment(ipo.open, "MMM DD, YYYY") : null;
-          return (
-            (listingDate && listingDate.isAfter(sixMonthsAgo)) ||
-            (openDate && openDate.isAfter(sixMonthsAgo))
-          );
-        });
-    
-        if (type === "all") {
-          filteredIPOs = validIPOs.map((ipo) => ({
-            name: cleanName(ipo.companyName),
-            href: ipo.href,
-          }));
-        } else if (type === "upcoming") {
-          filteredIPOs = validIPOs.filter((ipo) => {
-            return ipo.open && moment(ipo.open, "MMM DD, YYYY").isAfter(today);
-          });
-        } else if (type === "current") {
-          filteredIPOs = validIPOs.filter((ipo) => {
-            return (
-              ipo.open &&
-              ipo.listing &&
-              today.isBetween(moment(ipo.open, "MMM DD, YYYY"), moment(ipo.listing, "MMM DD, YYYY"), null, "[]")
-            );
-          });
-        } else if (type === "past") {
-          filteredIPOs = validIPOs.filter((ipo) => {
-            return ipo.listing && moment(ipo.listing, "MMM DD, YYYY").isBefore(today);
-          });
-        } else {
-          return res.status(400).json({
-            success: false,
-            message: "Invalid type. Use 'upcoming', 'current', or 'past'.",
-          });
-        }
+    const validIPOs = parsedIPOs.filter((ipo) => {
+      const listingDate = ipo.listing ? moment(ipo.listing, "MMM DD, YYYY") : null;
+      const openDate = ipo.open ? moment(ipo.open, "MMM DD, YYYY") : null;
+      return (
+        (listingDate && listingDate.isAfter(sixMonthsAgo)) ||
+        (openDate && openDate.isAfter(sixMonthsAgo))
+      );
+    });
+
+    if (type === "all") {
+      filteredIPOs = validIPOs.map((ipo) => ({
+        name: ipo.companyName,
+        href: ipo.href,
+      }));
+    } else if (type === "upcoming") {
+      filteredIPOs = validIPOs.filter((ipo) => {
+        return ipo.open && moment(ipo.open, "MMM DD, YYYY").isAfter(today);
+      });
+    } else if (type === "current") {
+      filteredIPOs = validIPOs.filter((ipo) => {
+        return (
+          ipo.open &&
+          ipo.listing &&
+          today.isBetween(moment(ipo.open, "MMM DD, YYYY"), moment(ipo.listing, "MMM DD, YYYY"), null, "[]")
+        );
+      });
+    } else if (type === "past") {
+      filteredIPOs = validIPOs.filter((ipo) => {
+        return ipo.listing && moment(ipo.listing, "MMM DD, YYYY").isBefore(today);
+      });
+    } else {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid type. Use 'upcoming', 'current', or 'past'.",
+      });
+    }
 
     filteredIPOs.sort((a, b) => {
       const dateA = a.open || moment(0);
