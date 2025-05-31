@@ -26,7 +26,7 @@ router.get("/", async (req, res) => {
         boaDate: item["BoA Dt"],
         listing: item.Listing,
         updatedAt: item["GMP Updated"],
-        href: item["~URLRewrite_Folder_Name"] ?item["~URLRewrite_Folder_Name"].replace("/gmp/", "") : "",
+        href: item["~urlrewrite_folder_name"] ?item["~urlrewrite_folder_name"]: "",
       };
     });
 
