@@ -14,7 +14,7 @@ router.get("/", async (req, res) => {
   }
   try {
     const { data: html } = await axios.get(
-      `https://www.chittorgarh.com/ipo/${slug}`
+      `https://www.investorgain.com/${slug}`
     );
     const $ = cheerio.load(html);
     const imageUrl = $("div.div-logo img").attr("src");
