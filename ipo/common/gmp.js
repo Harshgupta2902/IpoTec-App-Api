@@ -12,10 +12,14 @@ router.get("/", async (req, res) => {
     const ipoData = responseData.reportTableData.map((item) => {
       const listingPrice = item["Est Listing"] ? item["Est Listing"].replace(/<[^>]*>/g, "") : "";
 
+      const rawName = item["Name"] || "";
+      const nameMatch = rawName.match(/title="([^"]+)"/);
+      const companyName = nameMatch ? nameMatch[1] : rawName.replace(/<[^>]*>/g, "").trim();
+
       const gmpMatch = listingPrice.match(/\(([^)]+)\)/);
       const gmp = gmpMatch ? gmpMatch[1] : "";
       return {
-        companyName: item.IPO,
+        companyName: companyName,
         price: item.Price !== "NA" ? item.Price : "--",
         gmp: gmp,
         estListing: listingPrice,
