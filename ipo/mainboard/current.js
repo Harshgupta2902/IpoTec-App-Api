@@ -55,7 +55,7 @@ router.get("/", async (req, res) => {
         listing: listingDate,
         price: ipo["IPO Price"] || "-",
         size: ipo["IPO Size"].replaceAll("&#8377;", "") || "-",
-        lot: ipo["Lot"] || "-",
+        lot: String(ipo["Lot"]) || "-",
         exchange: [],
       };
     });
